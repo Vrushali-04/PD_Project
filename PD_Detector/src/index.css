@@ -1,0 +1,377 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  * {
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 213 100% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 213 100% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 213 100% 12%;
+
+    --primary: 188 91% 36%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 199 89% 48%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 197 71% 73%;
+    --accent-foreground: 213 100% 12%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 188 91% 36%;
+
+    --radius: 0.75rem;
+
+    --hero-gradient-start: 199 89% 48%;
+    --hero-gradient-end: 188 91% 36%;
+    
+    --glass-bg: 0 0% 100%;
+    --glass-border: 188 91% 36%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 213 100% 6%;
+    --foreground: 0 0% 98%;
+
+    --card: 213 50% 10%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 213 50% 10%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 188 91% 36%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 199 89% 48%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 197 71% 73%;
+    --accent-foreground: 213 100% 12%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 98%;
+
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 188 91% 36%;
+
+    --hero-gradient-start: 199 89% 28%;
+    --hero-gradient-end: 188 91% 26%;
+
+    --glass-bg: 213 50% 10%;
+    --glass-border: 188 91% 36%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply bg-card/80 backdrop-blur-lg border border-border/50 shadow-xl;
+  }
+
+  .glass-navbar {
+    @apply bg-background/70 backdrop-blur-md border-b border-border/30 shadow-lg;
+  }
+
+  .hero-gradient-clean {
+    background: linear-gradient(135deg, #e6f3ff 0%, #bfe6ff 50%, #ffffff 100%);
+    background-size: 100% 100%;
+  }
+
+  .wave-pattern {
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(0, 198, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(0, 114, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 20%, rgba(0, 201, 167, 0.1) 0%, transparent 50%);
+    animation: wave-float 20s ease-in-out infinite;
+  }
+
+  @keyframes wave-float {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+    }
+    50% {
+      transform: translateY(-20px) scale(1.05);
+    }
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent;
+    background-size: 200% auto;
+    animation: gradient-flow 3s linear infinite;
+  }
+
+  @keyframes gradient-flow {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+  }
+
+  .cta-button-gradient {
+    background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-button-gradient::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+
+  .cta-button-gradient:hover::before {
+    width: 400px;
+    height: 400px;
+  }
+
+  .cta-button-gradient:hover {
+    box-shadow: 0 0 30px rgba(0, 114, 255, 0.4);
+  }
+
+  .animate-pulse-gentle {
+    animation: pulse-gentle 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-gentle {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.8;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 1;
+    }
+  }
+
+
+  .nav-link-underline {
+    position: relative;
+    display: inline-block;
+  }
+
+  .nav-link-underline::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -4px;
+    left: 50%;
+    background: hsl(var(--primary));
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+  }
+
+  .nav-link-underline:hover::after {
+    width: 100%;
+  }
+
+  .timeline-card {
+    @apply glass-card p-6 relative;
+    transition: all 0.3s ease;
+  }
+
+  .timeline-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 123, 255, 0.2);
+  }
+
+  .timeline-arrow {
+    position: relative;
+  }
+
+  .timeline-arrow::after {
+    content: '→';
+    font-size: 2rem;
+    color: hsl(var(--primary));
+    animation: arrow-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes arrow-pulse {
+    0%, 100% { opacity: 0.5; transform: translateX(0); }
+    50% { opacity: 1; transform: translateX(5px); }
+  }
+
+  .parallax-section {
+    position: relative;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .floating-icon {
+    animation: float-gentle 3s ease-in-out infinite;
+  }
+
+  @keyframes float-gentle {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-10px) rotate(2deg); }
+    75% { transform: translateY(-5px) rotate(-2deg); }
+  }
+
+  .pulse-glow {
+    animation: pulse-glow-animation 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow-animation {
+    0%, 100% { 
+      box-shadow: 0 0 20px rgba(0, 201, 167, 0.3);
+    }
+    50% { 
+      box-shadow: 0 0 40px rgba(0, 201, 167, 0.6), 0 0 60px rgba(0, 123, 255, 0.4);
+    }
+  }
+
+  .particle-bg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+    animation: float-gentle 20s infinite ease-in-out;
+    opacity: 0.4;
+  }
+
+  .wave-bg {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .wave-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(0, 123, 255, 0.03), transparent);
+    animation: wave-move 8s infinite ease-in-out;
+  }
+
+  @keyframes wave-move {
+    0%, 100% {
+      transform: translateX(-100%);
+    }
+    50% {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes subtle-shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+    20%, 40%, 60%, 80% { transform: translateX(2px); }
+  }
+
+  @keyframes elegant-pulse {
+    0%, 100% { 
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% { 
+      transform: scale(1.02);
+      opacity: 0.95;
+    }
+  }
+
+  @keyframes slide-in-left {
+    0% {
+      transform: translateX(-30px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  .animate-subtle-shake {
+    animation: subtle-shake 2s ease-in-out infinite;
+  }
+
+  .animate-elegant-pulse {
+    animation: elegant-pulse 3s ease-in-out infinite;
+  }
+
+  .animate-slide-in-left {
+    animation: slide-in-left 1s ease-out;
+  }
+
+  .animate-button-fade-in {
+    animation: fade-in 0.8s ease-out 0.6s both;
+  }
+}
