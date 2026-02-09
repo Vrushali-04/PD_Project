@@ -2,25 +2,28 @@ import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Upload, X, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
+import PredictionResult from "./PredictionResult";
 
-interface ImageUploadProps {
-  onImageAnalyzed: (result: string) => void;
+interface PredictionResponse {
+  prediction?: string;
+  confidence?: number;
+  error?: string;
 }
 
-const ImageUpload = ({ onImageAnalyzed }: ImageUploadProps) => {
+const ImageUpload = () => {
   const [image, setImage] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [result, setResult] = useState<{ prediction: "healthy" | "detected"; confidence: number } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Drag-and-drop handlers
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
   };
-
   const handleDragLeave = () => setIsDragging(false);
-
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
@@ -32,16 +35,19 @@ const ImageUpload = ({ onImageAnalyzed }: ImageUploadProps) => {
     }
   };
 
+  // File selection
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) handleFile(selectedFile);
   };
 
+  // Handle uploaded file
   const handleFile = (selectedFile: File) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       setImage(e.target?.result as string);
       setFile(selectedFile);
+      setResult(null);
       toast.success("Image uploaded successfully");
     };
     reader.readAsDataURL(selectedFile);
@@ -50,10 +56,11 @@ const ImageUpload = ({ onImageAnalyzed }: ImageUploadProps) => {
   const handleRemove = () => {
     setImage(null);
     setFile(null);
+    setResult(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  // 🧠 Connect to Flask backend for prediction
+  // Analyze image with backend
   const handleAnalyze = async () => {
     if (!file) {
       toast.error("Please upload an image first");
@@ -63,23 +70,36 @@ const ImageUpload = ({ onImageAnalyzed }: ImageUploadProps) => {
     setLoading(true);
     toast.info("Analyzing image...");
 
-    const formData = new FormData();
-    formData.append("file", file);
-
     try {
+      const formData = new FormData();
+      formData.append("image", file); // ⚡ Must match Flask key
+
       const response = await fetch("http://127.0.0.1:5000/predict_image", {
         method: "POST",
         body: formData,
       });
 
-      if (!response.ok) throw new Error("Failed to connect to backend");
+      // Check for HTML response (common if Flask route wrong)
+      const text = await response.text();
+      let data: PredictionResponse;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error("Invalid response from server. Make sure backend is running at /predict-image");
+      }
 
-      const data = await response.json();
-      onImageAnalyzed(data.prediction || "Error");
-      toast.success(`Image analysis complete: ${data.prediction}`);
-    } catch (error) {
+      if (!response.ok || data.error) {
+        throw new Error(data.error || "Failed to analyze image");
+      }
+
+      // Map backend label "parkinson" → detected
+      const prediction: "healthy" | "detected" = data.prediction === "parkinson" ? "detected" : "healthy";
+
+      setResult({ prediction, confidence: data.confidence! });
+      toast.success(`Image analysis complete: ${prediction}`);
+    } catch (error: any) {
       console.error(error);
-      toast.error("Error analyzing image. Please try again.");
+      toast.error(`Error analyzing image: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -103,9 +123,7 @@ const ImageUpload = ({ onImageAnalyzed }: ImageUploadProps) => {
               <Upload className="h-10 w-10 text-primary" />
             </div>
             <div>
-              <p className="text-lg font-medium mb-1">
-                Drag and drop your image here
-              </p>
+              <p className="text-lg font-medium mb-1">Drag and drop your image here</p>
               <p className="text-sm text-muted-foreground mb-4">
                 or click to browse (brain scan or handwriting sample)
               </p>
@@ -115,13 +133,11 @@ const ImageUpload = ({ onImageAnalyzed }: ImageUploadProps) => {
                 accept="image/*"
                 onChange={handleFileSelect}
                 className="hidden"
-                id="image-upload"
               />
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => fileInputRef.current?.click()}
-                className="hover:border-primary hover:text-primary transition-colors"
               >
                 <ImageIcon className="mr-2 h-4 w-4" />
                 Browse Files
@@ -161,6 +177,12 @@ const ImageUpload = ({ onImageAnalyzed }: ImageUploadProps) => {
               </>
             )}
           </Button>
+          {result && (
+            <PredictionResult
+              result={result.prediction}
+              confidence={result.confidence}
+            />
+          )}
         </div>
       )}
     </div>
