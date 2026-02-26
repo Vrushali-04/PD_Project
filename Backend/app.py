@@ -1,131 +1,159 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-import joblib
-import numpy as np
 import os
-import torch
-import torch.nn as nn
-from torchvision import transforms
-from PIL import Image
-import pickle
+import bcrypt
+from db import db
+from models.predict_image import predict_image  # your updated predict_image.py
+from models.predict_voice import predict_voice
 
+# ==============================
+# CONFIG
+# ==============================
 app = Flask(__name__)
-CORS(app)
+CORS(app)  # allow cross-origin requests
 
-# ---------------------- VOICE MODEL SETUP ----------------------
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "models")
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
-# Load voice model & scaler
-voice_model = joblib.load(os.path.join(MODEL_PATH, "svm_voice_model.pkl"))
-voice_scaler = joblib.load(os.path.join(MODEL_PATH, "voice_scaler.pkl"))
+# ==============================
+# ROUTES
+# ==============================
 
-# ---------------------- IMAGE MODEL SETUP ----------------------
-# CNN Model Definition (must match training script)
-class CNNModel(nn.Module):
-    def __init__(self):
-        super(CNNModel, self).__init__()
-        self.conv_layers = nn.Sequential(
-            nn.Conv2d(3, 32, 3, 1),
-            nn.ReLU(),
-            nn.MaxPool2d(2, 2),
-
-            nn.Conv2d(32, 64, 3, 1),
-            nn.ReLU(),
-            nn.MaxPool2d(2, 2)
-        )
-
-        self.fc_layers = nn.Sequential(
-            nn.Flatten(),
-            nn.Linear(64 * 30 * 30, 128),
-            nn.ReLU(),
-            nn.Dropout(0.3),
-            nn.Linear(128, 2),
-            nn.LogSoftmax(dim=1)
-        )
-
-    def forward(self, x):
-        x = self.conv_layers(x)
-        x = self.fc_layers(x)
-        return x
-
-
-# Load model and label classes
-image_model_path = os.path.join(MODEL_PATH, "cnn_image_model.pth")
-label_path = os.path.join(MODEL_PATH, "image_labels.pkl")
-
-image_model = CNNModel()
-state_dict = torch.load(image_model_path, map_location=torch.device('cpu'))
-image_model.load_state_dict(state_dict)
-image_model.eval()
-
-with open(label_path, "rb") as f:
-    image_classes = pickle.load(f)
-
-# Define preprocessing (must match training)
-transform = transforms.Compose([
-    transforms.Resize((128, 128)),
-    transforms.ToTensor(),
-    transforms.Normalize((0.5,), (0.5,))
-])
-
-# ---------------------- ROUTES ----------------------
-@app.route('/')
+# Home / Health check
+@app.route("/")
 def home():
-    return "✅ Parkinson's Detection API (Voice + Image) is running!"
+    return jsonify({"status": "PD Backend Running ✅"})
 
-# ---------- VOICE PREDICTION ----------
-@app.route('/predict_voice', methods=['POST'])
-def predict_voice():
+# Serve favicon to avoid 404
+@app.route("/favicon.ico")
+def favicon():
+    return send_from_directory(
+        os.path.join(app.root_path, "static"),
+        "favicon.ico",
+        mimetype="image/vnd.microsoft.icon"
+    )
+
+# ==============================
+# 🔐 AUTH ROUTES (ADDED ONLY)
+# ==============================
+
+@app.route("/signup", methods=["POST"])
+def signup():
     try:
-        data = request.get_json()
+        data = request.get_json(force=True)
 
-        # Extract features
+        if not data:
+            return jsonify({"message": "No JSON data received"}), 400
+
+        name = data.get("name")
+        email = data.get("email")
+        password = data.get("password")
+
+        if not name or not email or not password:
+            return jsonify({"message": "All fields are required"}), 400
+
+        hashed_pw = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+
+        cursor = db.cursor()
+        cursor.execute(
+            "INSERT INTO users (name, email, password) VALUES (%s, %s, %s)",
+            (name, email, hashed_pw.decode())
+        )
+        db.commit()
+
+        return jsonify({"message": "Signup successful"}), 201
+
+    except Exception as e:
+        print("Signup Error:", e)
+        return jsonify({"message": "Server error during signup"}), 500
+
+
+@app.route("/login", methods=["POST"])
+def login():
+    data = request.json
+    email = data["email"]
+    password = data["password"]
+
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
+    user = cursor.fetchone()
+
+    if user and bcrypt.checkpw(password.encode(), user["password"].encode()):
+        return jsonify({"message": "Login successful", "name": user["name"]})
+    else:
+        return jsonify({"message": "Invalid email or password"}), 401
+
+
+# ==============================
+# Image prediction route
+# ==============================
+@app.route("/predict_image", methods=["POST"])
+def predict_image_api():
+    # ⚡ The key must match frontend FormData key: "image"
+    if "image" not in request.files:
+        return jsonify({"error": "No image file provided"}), 400
+
+    file = request.files["image"]
+
+    if file.filename == "":
+        return jsonify({"error": "Empty filename"}), 400
+
+    try:
+        # Save uploaded file temporarily
+        file_path = os.path.join(app.config["UPLOAD_FOLDER"], file.filename)
+        file.save(file_path)
+
+        # Predict
+        result = predict_image(file_path)
+
+        # Remove temporary file
+        os.remove(file_path)
+
+        # Handle prediction errors (brain check etc.)
+        if "error" in result:
+            return jsonify(result), 400
+
+        return jsonify(result)
+
+    except Exception as e:
+        # Catch unexpected errors
+        print("Error:", e)
+        return jsonify({"error": "Failed to process image"}), 500
+    
+@app.route("/predict_voice", methods=["POST"])
+def predict_voice_route():
+    try:
+        print("VOICE ROUTE CALLED")  # Debug 1
+
+        data = request.get_json()
+        print("Received Data:", data)  # Debug 2
+
         features = [
-            data["MDVP_Fo_Hz"],
-            data["MDVP_Jitter_percent"],
-            data["MDVP_Shimmer"],
-            data["HNR"],
-            data["RPDE"],
-            data["DFA"],
-            data["Spread1"],
-            data["Spread2"],
-            data["PPE"]
+            float(data["MDVP_Fo_Hz"]),
+            float(data["MDVP_Jitter_percent"]),
+            float(data["MDVP_Shimmer"]),
+            float(data["HNR"]),
+            float(data["RPDE"]),
+            float(data["DFA"]),
+            float(data["Spread1"]),
+            float(data["Spread2"]),
+            float(data["PPE"])
         ]
 
-        input_data = np.array(features).reshape(1, -1)
-        scaled_data = voice_scaler.transform(input_data)
-        prediction = voice_model.predict(scaled_data)[0]
-        result = "Parkinson's Detected" if prediction == 1 else "Healthy"
+        print("Converted Features:", features)  # Debug 3
 
-        return jsonify({"type": "voice", "prediction": int(prediction), "result": result})
+        result = predict_voice(features)
+
+        print("Prediction Result:", result)  # Debug 4
+
+        return jsonify(result)
+
     except Exception as e:
-        return jsonify({"error": str(e)})
-
-# ---------- IMAGE PREDICTION ----------
-@app.route('/predict_image', methods=['POST'])
-def predict_image():
-    try:
-        if 'file' not in request.files:
-            return jsonify({"error": "No file provided"}), 400
-
-        file = request.files['file']
-        temp_path = os.path.join("temp_" + file.filename)
-        file.save(temp_path)
-
-        image = Image.open(temp_path).convert('RGB')
-        img_tensor = transform(image).unsqueeze(0)
-
-        with torch.no_grad():
-            outputs = image_model(img_tensor)
-            _, predicted = torch.max(outputs, 1)
-            prediction = image_classes[predicted.item()]
-
-        os.remove(temp_path)
-
-        return jsonify({"type": "image", "prediction": prediction})
-    except Exception as e:
-        return jsonify({"error": str(e)})
-
-# ---------------------- MAIN ENTRY ----------------------
-if __name__ == '__main__':
+        print("ERROR:", str(e))  # Debug 5
+        return jsonify({"error": str(e)}), 400
+# ==============================
+# RUN SERVER
+# ==============================
+if __name__ == "__main__":
     app.run(debug=True)
