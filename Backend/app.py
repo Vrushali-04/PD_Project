@@ -125,10 +125,14 @@ def predict_image_api():
 # ==============================
 # 🎤 VOICE PREDICTION
 # ==============================
+
 @app.route("/predict_voice", methods=["POST"])
 def predict_voice_route():
     try:
+        print("🔥 Voice API Called 🔥")
+
         data = request.get_json()
+        print("Received Data:", data)
 
         features = [
             float(data["MDVP_Fo_Hz"]),
@@ -142,14 +146,16 @@ def predict_voice_route():
             float(data["PPE"])
         ]
 
+        print("Processed Features:", features)
+
         result = predict_voice(features)
+        print("Prediction Result:", result)
 
         return jsonify(result)
 
     except Exception as e:
         print("Voice Prediction Error:", e)
         return jsonify({"error": str(e)}), 400
-
 
 # ==============================
 # RUN SERVER

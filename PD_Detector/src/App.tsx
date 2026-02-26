@@ -1,4 +1,5 @@
 import Prediction from "./pages/Prediction";
+import VoicePrediction from "./components/VoicePrediction"; // ✅ FIXED PATH
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -18,20 +19,18 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          {/* 🔁 Redirect root to signup */}
           <Route path="/" element={<Navigate to="/signup" />} />
 
-          {/* 🔐 Auth Pages */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
 
-          {/* 🏠 Home Page */}
           <Route path="/home" element={<Index />} />
 
-          {/* 🧠 Parkinson’s Detection Page */}
           <Route path="/predict" element={<Prediction />} />
 
-          {/* ❌ 404 Page */}
+          {/* 🎤 Voice Prediction Page */}
+          <Route path="/voice" element={<VoicePrediction />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
