@@ -16,17 +16,16 @@ UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
-# ==============================
-# ROUTES
-# ==============================
 
-# Home / Health check
+# ==============================
+# HOME ROUTE
+# ==============================
 @app.route("/")
 def home():
     return jsonify({"status": "PD Backend Running ✅"})
 
 
-# Serve favicon to avoid 404
+# Avoid favicon 404 error
 @app.route("/favicon.ico")
 def favicon():
     return send_from_directory(
@@ -35,6 +34,7 @@ def favicon():
         mimetype="image/vnd.microsoft.icon"
     )
 
+
 # ==============================
 # 🔐 AUTH ROUTES
 # ==============================
@@ -42,7 +42,7 @@ def favicon():
 @app.route("/signup", methods=["POST"])
 def signup():
     try:
-        data = request.get_json(force=True)
+        data = request.get_json()
 
         if not data:
             return jsonify({"message": "No JSON data received"}), 400
@@ -54,46 +54,67 @@ def signup():
         if not name or not email or not password:
             return jsonify({"message": "All fields are required"}), 400
 
-        hashed_pw = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+        cursor = db.cursor(dictionary=True)
 
-        cursor = db.cursor()
+        # Check if email already exists
+        cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
+        existing_user = cursor.fetchone()
+        if existing_user:
+            return jsonify({"message": "Email already registered"}), 400
+
+        hashed_pw = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+
         cursor.execute(
             "INSERT INTO users (name, email, password) VALUES (%s, %s, %s)",
-            (name, email, hashed_pw.decode())
+            (name, email, hashed_pw)
         )
         db.commit()
+
+        print("✅ New user registered:", email)
 
         return jsonify({"message": "Signup successful"}), 201
 
     except Exception as e:
-        print("Signup Error:", e)
+        print("❌ Signup Error:", e)
         return jsonify({"message": "Server error during signup"}), 500
 
 
 @app.route("/login", methods=["POST"])
 def login():
     try:
-        data = request.json
-        email = data["email"]
-        password = data["password"]
+        data = request.get_json()
+
+        if not data:
+            return jsonify({"message": "No JSON data received"}), 400
+
+        email = data.get("email")
+        password = data.get("password")
+
+        if not email or not password:
+            return jsonify({"message": "Email and password required"}), 400
 
         cursor = db.cursor(dictionary=True)
         cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
         user = cursor.fetchone()
 
         if user and bcrypt.checkpw(password.encode(), user["password"].encode()):
-            return jsonify({"message": "Login successful", "name": user["name"]})
+            print("✅ Login successful:", email)
+            return jsonify({
+                "message": "Login successful",
+                "name": user["name"]
+            })
         else:
             return jsonify({"message": "Invalid email or password"}), 401
 
     except Exception as e:
-        print("Login Error:", e)
+        print("❌ Login Error:", e)
         return jsonify({"message": "Server error during login"}), 500
 
 
 # ==============================
 # 🖼️ IMAGE PREDICTION
 # ==============================
+
 @app.route("/predict_image", methods=["POST"])
 def predict_image_api():
     if "image" not in request.files:
@@ -108,17 +129,21 @@ def predict_image_api():
         file_path = os.path.join(app.config["UPLOAD_FOLDER"], file.filename)
         file.save(file_path)
 
+        print("📷 Image received:", file.filename)
+
         result = predict_image(file_path)
 
         os.remove(file_path)
 
-        if "error" in result:
-            return jsonify(result), 400
+        if not isinstance(result, dict):
+            return jsonify({"error": "Invalid prediction result"}), 500
+
+        print("✅ Image Prediction:", result)
 
         return jsonify(result)
 
     except Exception as e:
-        print("Image Prediction Error:", e)
+        print("❌ Image Prediction Error:", e)
         return jsonify({"error": "Failed to process image"}), 500
 
 
@@ -129,36 +154,56 @@ def predict_image_api():
 @app.route("/predict_voice", methods=["POST"])
 def predict_voice_route():
     try:
-        print("🔥 Voice API Called 🔥")
+        print("\n🔥 Voice API Called 🔥")
 
         data = request.get_json()
-        print("Received Data:", data)
 
-        features = [
-            float(data["MDVP_Fo_Hz"]),
-            float(data["MDVP_Jitter_percent"]),
-            float(data["MDVP_Shimmer"]),
-            float(data["HNR"]),
-            float(data["RPDE"]),
-            float(data["DFA"]),
-            float(data["Spread1"]),
-            float(data["Spread2"]),
-            float(data["PPE"])
+        if not data:
+            return jsonify({"error": "No JSON data received"}), 400
+
+        required_fields = [
+            "MDVP_Fo_Hz",
+            "MDVP_Jitter_percent",
+            "MDVP_Shimmer",
+            "HNR",
+            "RPDE",
+            "DFA",
+            "Spread1",
+            "Spread2",
+            "PPE"
         ]
 
-        print("Processed Features:", features)
+        # Validate fields
+        for field in required_fields:
+            if field not in data:
+                return jsonify({"error": f"Missing field: {field}"}), 400
+
+        features = []
+        for field in required_fields:
+            try:
+                features.append(float(data[field]))
+            except ValueError:
+                return jsonify({"error": f"Invalid numeric value for {field}"}), 400
+
+        print("📊 Processed Features:", features)
 
         result = predict_voice(features)
-        print("Prediction Result:", result)
+
+        if not isinstance(result, dict):
+            return jsonify({"error": "Invalid prediction result"}), 500
+
+        print("✅ Voice Prediction Result:", result)
 
         return jsonify(result)
 
     except Exception as e:
-        print("Voice Prediction Error:", e)
-        return jsonify({"error": str(e)}), 400
+        print("❌ Voice Prediction Error:", e)
+        return jsonify({"error": "Voice prediction failed"}), 500
+
 
 # ==============================
 # RUN SERVER
 # ==============================
 if __name__ == "__main__":
-    app.run(debug=True)
+    print("🚀 Starting PD Backend Server...")
+    app.run(host="0.0.0.0", port=5000, debug=True)

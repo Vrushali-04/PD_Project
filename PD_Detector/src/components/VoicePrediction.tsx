@@ -3,10 +3,22 @@ import { Button } from "@/components/ui/button";
 import VoiceFeatureInputs from "@/components/VoiceFeatureInputs";
 import { toast } from "sonner";
 
-const VoicePrediction = () => {
-  console.log("VoicePrediction component loaded");
+interface VoiceFormData {
+  mdvpFo: string;
+  mdvpJitter: string;
+  mdvpShimmer: string;
+  hnr: string;
+  rpde: string;
+  dfa: string;
+  spread1: string;
+  spread2: string;
+  ppe: string;
+}
 
-  const [formData, setFormData] = useState({
+const VoicePrediction = () => {
+  console.log("🎤 VoicePrediction component loaded");
+
+  const [formData, setFormData] = useState<VoiceFormData>({
     mdvpFo: "",
     mdvpJitter: "",
     mdvpShimmer: "",
@@ -21,63 +33,95 @@ const VoicePrediction = () => {
   const [result, setResult] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  // Convert and validate numeric input
+  const parseNumber = (value: string) => {
+    const num = parseFloat(value);
+    return isNaN(num) ? null : num;
   };
 
   const handleSubmit = async () => {
-    console.log("BUTTON CLICKED 🔥");
+    console.log("🔥 Analyze Button Clicked");
 
-    // ✅ Validation
-    if (Object.values(formData).some((value) => value === "")) {
+    // ✅ Validation: check empty fields
+    if (Object.values(formData).some((value) => value.trim() === "")) {
       toast.error("Please fill all fields");
       return;
     }
 
     setLoading(true);
+    setResult(null);
     toast.info("Analyzing voice features...");
 
     try {
-      console.log("Sending request to backend...");
+      const payload = {
+        MDVP_Fo_Hz: parseNumber(formData.mdvpFo),
+        MDVP_Jitter_percent: parseNumber(formData.mdvpJitter),
+        MDVP_Shimmer: parseNumber(formData.mdvpShimmer),
+        HNR: parseNumber(formData.hnr),
+        RPDE: parseNumber(formData.rpde),
+        DFA: parseNumber(formData.dfa),
+        Spread1: parseNumber(formData.spread1),
+        Spread2: parseNumber(formData.spread2),
+        PPE: parseNumber(formData.ppe),
+      };
+
+      // ✅ Check if any value failed parsing
+      if (Object.values(payload).some((val) => val === null)) {
+        toast.error("All values must be valid numbers");
+        setLoading(false);
+        return;
+      }
+
+      console.log("📤 Sending payload:", payload);
 
       const response = await fetch("http://localhost:5000/predict_voice", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          MDVP_Fo_Hz: parseFloat(formData.mdvpFo),
-          MDVP_Jitter_percent: parseFloat(formData.mdvpJitter),
-          MDVP_Shimmer: parseFloat(formData.mdvpShimmer),
-          HNR: parseFloat(formData.hnr),
-          RPDE: parseFloat(formData.rpde),
-          DFA: parseFloat(formData.dfa),
-          Spread1: parseFloat(formData.spread1),
-          Spread2: parseFloat(formData.spread2),
-          PPE: parseFloat(formData.ppe),
-        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
       });
 
-      console.log("Response status:", response.status);
+      console.log("📡 Response status:", response.status);
 
       if (!response.ok) {
-        throw new Error("Backend error");
+        const errorText = await response.text();
+        console.error("❌ Backend error:", errorText);
+        throw new Error("Backend returned error");
       }
 
       const data = await response.json();
-      console.log("Backend response:", data);
+      console.log("✅ Backend response:", data);
 
-      // ✅ Correctly read prediction & confidence
-      if (data.prediction && data.confidence !== undefined) {
-        const finalResult = `${data.prediction} (Confidence: ${data.confidence}%)`;
+      if (
+        typeof data.prediction === "string" &&
+        typeof data.confidence !== "undefined"
+      ) {
+        const confidenceValue =
+          typeof data.confidence === "number"
+            ? data.confidence.toFixed(2)
+            : data.confidence;
+
+        const finalResult = `${data.prediction} (Confidence: ${confidenceValue}%)`;
+
         setResult(finalResult);
-        toast.success(finalResult);
+        toast.success("Prediction completed successfully");
       } else {
+        console.error("⚠️ Invalid backend response format:", data);
         setResult("Invalid response from backend");
         toast.error("Invalid backend response");
       }
-
     } catch (error) {
-      console.error("Fetch Error:", error);
-      toast.error("Error analyzing voice features");
+      console.error("🚨 Fetch error:", error);
+      toast.error("Cannot connect to backend server");
     } finally {
       setLoading(false);
     }

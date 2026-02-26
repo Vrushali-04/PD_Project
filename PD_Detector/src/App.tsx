@@ -1,5 +1,5 @@
 import Prediction from "./pages/Prediction";
-import VoicePrediction from "./components/VoicePrediction"; // ✅ FIXED PATH
+import VoicePrediction from "./components/VoicePrediction";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,30 +12,53 @@ import Signup from "./pages/Signup";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate to="/signup" />} />
+/*
+  ROUTING STRUCTURE:
 
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+  /            → Redirect to /login
+  /login       → Login page
+  /signup      → Signup page
+  /home        → Dashboard
+  /predict     → Image prediction page
+  /voice       → Voice prediction page
+  *            → 404 page
+*/
 
-          <Route path="/home" element={<Index />} />
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
 
-          <Route path="/predict" element={<Prediction />} />
+        <BrowserRouter>
+          <Routes>
 
-          {/* 🎤 Voice Prediction Page */}
-          <Route path="/voice" element={<VoicePrediction />} />
+            {/* Default Route */}
+            <Route path="/" element={<Navigate to="/login" replace />} />
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+            {/* Auth Routes */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+
+            {/* Main Pages */}
+            <Route path="/home" element={<Index />} />
+
+            {/* Image Prediction */}
+            <Route path="/predict" element={<Prediction />} />
+
+            {/* Voice Prediction */}
+            <Route path="/voice" element={<VoicePrediction />} />
+
+            {/* 404 */}
+            <Route path="*" element={<NotFound />} />
+
+          </Routes>
+        </BrowserRouter>
+
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+}
 
 export default App;
