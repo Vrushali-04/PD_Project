@@ -34,9 +34,10 @@ const PredictionForm = () => {
   });
 
   const [result, setResult] = useState<"healthy" | "detected" | null>(null);
+  const [confidence, setConfidence] = useState<number>(0);
   const [loading, setLoading] = useState(false);
-  const [confidence, setConfidence] = useState(85);
-  const [activeSection, setActiveSection] = useState<"voice" | "image" | "drawing">("voice");
+  const [activeSection, setActiveSection] =
+    useState<"voice" | "image" | "drawing">("voice");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -45,33 +46,10 @@ const PredictionForm = () => {
     });
   };
 
-  const simulatePrediction = (data: FormData): { result: "healthy" | "detected"; confidence: number } => {
-    // Simulated ML prediction logic
-    // In production, this would call Flask backend API at /predict_voice
-    const values = Object.values(data).map(Number);
-    const avgValue = values.reduce((a, b) => a + b, 0) / values.length;
-    
-    // Simple simulation with confidence
-    const result = avgValue > 0.5 ? "detected" : "healthy";
-    const confidence = Math.floor(Math.random() * 15) + 80; // 80-95%
-    return { result, confidence };
-  };
-
-  const handleImageAnalyzed = (imageResult: string) => {
-    setResult(imageResult as "healthy" | "detected");
-    setConfidence(Math.floor(Math.random() * 15) + 80);
-  };
-
-  const handlePatternAnalyzed = (patternResult: string) => {
-    setResult(patternResult as "healthy" | "detected");
-    setConfidence(Math.floor(Math.random() * 15) + 80);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validate all fields are filled
-    if (Object.values(formData).some(val => val === "")) {
+
+    if (Object.values(formData).some((val) => val === "")) {
       toast.error("Please fill in all fields");
       return;
     }
@@ -79,27 +57,74 @@ const PredictionForm = () => {
     setLoading(true);
     setResult(null);
 
-    // Simulate API call delay
-    setTimeout(() => {
-      const prediction = simulatePrediction(formData);
-      setResult(prediction.result);
-      setConfidence(prediction.confidence);
-      setLoading(false);
-      
-      if (prediction.result === "healthy") {
+    try {
+      const response = await fetch("http://localhost:5000/predict_voice", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mdvpFo: parseFloat(formData.mdvpFo),
+          mdvpJitter: parseFloat(formData.mdvpJitter),
+          mdvpShimmer: parseFloat(formData.mdvpShimmer),
+          hnr: parseFloat(formData.hnr),
+          rpde: parseFloat(formData.rpde),
+          dfa: parseFloat(formData.dfa),
+          spread1: parseFloat(formData.spread1),
+          spread2: parseFloat(formData.spread2),
+          ppe: parseFloat(formData.ppe),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Server error");
+      }
+
+      const data = await response.json();
+
+      /*
+        Backend must return:
+        {
+          prediction: "healthy" or "detected",
+          confidence: 0.89   // between 0 and 1
+        }
+      */
+
+      setResult(data.prediction === "detected" ? "detected" : "healthy");
+      setConfidence(data.confidence);
+
+      if (data.prediction === "healthy") {
         toast.success("Analysis complete!");
       } else {
-        toast.warning("Analysis complete - Please consult a medical professional");
+        toast.warning(
+          "High probability detected. Please consult a medical professional."
+        );
       }
-    }, 2000);
+    } catch (error) {
+      console.error("Backend error:", error);
+      toast.error("Failed to connect to backend");
+    }
+
+    setLoading(false);
+  };
+
+  // Keep these simple (matches your existing components)
+  const handleImageAnalyzed = (imageResult: string) => {
+    setResult(imageResult as "healthy" | "detected");
+    setConfidence(0.85);
+  };
+
+  const handlePatternAnalyzed = (patternResult: string) => {
+    setResult(patternResult as "healthy" | "detected");
+    setConfidence(0.85);
   };
 
   return (
     <section id="prediction" className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12 animate-fade-in">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4">
               Disease <span className="text-gradient">Prediction</span>
             </h2>
             <p className="text-lg text-muted-foreground">
@@ -107,66 +132,52 @@ const PredictionForm = () => {
             </p>
           </div>
 
-          {/* Section Selector Tabs */}
+          {/* Tabs */}
           <div className="flex gap-4 mb-8 flex-wrap justify-center">
             <Button
               type="button"
               variant={activeSection === "voice" ? "default" : "outline"}
               onClick={() => setActiveSection("voice")}
-              className="flex-1 min-w-[200px] h-auto py-4 px-6"
+              className="flex-1 min-w-[200px]"
             >
               <Mic className="mr-2 h-5 w-5" />
-              <div className="text-left">
-                <div className="font-semibold">Voice Features</div>
-                <div className="text-xs opacity-80">Biomedical parameters</div>
-              </div>
+              Voice Features
             </Button>
+
             <Button
               type="button"
               variant={activeSection === "image" ? "default" : "outline"}
               onClick={() => setActiveSection("image")}
-              className="flex-1 min-w-[200px] h-auto py-4 px-6"
+              className="flex-1 min-w-[200px]"
             >
               <Image className="mr-2 h-5 w-5" />
-              <div className="text-left">
-                <div className="font-semibold">Image Upload</div>
-                <div className="text-xs opacity-80">Medical patterns</div>
-              </div>
+              Image Upload
             </Button>
+
             <Button
               type="button"
               variant={activeSection === "drawing" ? "default" : "outline"}
               onClick={() => setActiveSection("drawing")}
-              className="flex-1 min-w-[200px] h-auto py-4 px-6"
+              className="flex-1 min-w-[200px]"
             >
               <Pencil className="mr-2 h-5 w-5" />
-              <div className="text-left">
-                <div className="font-semibold">Drawing Pattern</div>
-                <div className="text-xs opacity-80">Tremor analysis</div>
-              </div>
+              Drawing Pattern
             </Button>
           </div>
 
-          {/* Voice Features Section */}
+          {/* Voice Section */}
           {activeSection === "voice" && (
-            <Card className="glass-card p-8 animate-scale-in">
-              <div className="mb-6">
-                <h3 className="text-2xl font-bold flex items-center gap-2 mb-2">
-                  <Mic className="h-6 w-6 text-primary" />
-                  Voice Features Input
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Enter biomedical voice measurement parameters below
-                </p>
-              </div>
-              
+            <Card className="p-8">
               <form onSubmit={handleSubmit} className="space-y-6">
-                <VoiceFeatureInputs formData={formData} onChange={handleInputChange} />
+                <VoiceFeatureInputs
+                  formData={formData}
+                  onChange={handleInputChange}
+                />
 
                 <Button
                   type="submit"
                   size="lg"
-                  className="w-full font-semibold text-lg"
+                  className="w-full"
                   disabled={loading}
                 >
                   {loading ? (
@@ -180,45 +191,38 @@ const PredictionForm = () => {
                 </Button>
               </form>
 
-              {result && <PredictionResult result={result} confidence={confidence} />}
+              {result && (
+                <PredictionResult
+                  result={result}
+                  confidence={confidence}
+                />
+              )}
             </Card>
           )}
 
-          {/* Image Upload Section */}
+          {/* Image Section */}
           {activeSection === "image" && (
-            <Card className="glass-card p-8 animate-scale-in">
-              <div className="mb-6">
-                <h3 className="text-2xl font-bold flex items-center gap-2 mb-2">
-                  <Image className="h-6 w-6 text-primary" />
-                  Upload Biomedical or Pattern Images
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Upload brain scan or medical pattern images for AI-based analysis
-                </p>
-              </div>
-
+            <Card className="p-8">
               <ImageUpload onImageAnalyzed={handleImageAnalyzed} />
-
-              {result && <PredictionResult result={result} confidence={confidence} />}
+              {result && (
+                <PredictionResult
+                  result={result}
+                  confidence={confidence}
+                />
+              )}
             </Card>
           )}
 
-          {/* Drawing Canvas Section */}
+          {/* Drawing Section */}
           {activeSection === "drawing" && (
-            <Card className="glass-card p-8 animate-scale-in">
-              <div className="mb-6">
-                <h3 className="text-2xl font-bold flex items-center gap-2 mb-2">
-                  <Pencil className="h-6 w-6 text-primary" />
-                  Handwriting Pattern / Drawing Input
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Draw a pattern to analyze tremor characteristics
-                </p>
-              </div>
-
+            <Card className="p-8">
               <DrawingCanvas onPatternAnalyzed={handlePatternAnalyzed} />
-
-              {result && <PredictionResult result={result} confidence={confidence} />}
+              {result && (
+                <PredictionResult
+                  result={result}
+                  confidence={confidence}
+                />
+              )}
             </Card>
           )}
         </div>
