@@ -1,3 +1,6 @@
+import os
+print("Running file:", __file__)
+print("Current working dir:", os.getcwd())
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
@@ -206,4 +209,4 @@ def predict_voice_route():
 # ==============================
 if __name__ == "__main__":
     print("🚀 Starting PD Backend Server...")
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=False)
