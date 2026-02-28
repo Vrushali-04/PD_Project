@@ -41,16 +41,10 @@ const VoicePrediction = () => {
     }));
   };
 
-  // Convert and validate numeric input
-  const parseNumber = (value: string) => {
-    const num = parseFloat(value);
-    return isNaN(num) ? null : num;
-  };
-
   const handleSubmit = async () => {
     console.log("🔥 Analyze Button Clicked");
 
-    // ✅ Validation: check empty fields
+    // ✅ Check empty fields
     if (Object.values(formData).some((value) => value.trim() === "")) {
       toast.error("Please fill all fields");
       return;
@@ -61,24 +55,18 @@ const VoicePrediction = () => {
     toast.info("Analyzing voice features...");
 
     try {
+      // ✅ Send raw values (backend will convert to float)
       const payload = {
-        MDVP_Fo_Hz: parseNumber(formData.mdvpFo),
-        MDVP_Jitter_percent: parseNumber(formData.mdvpJitter),
-        MDVP_Shimmer: parseNumber(formData.mdvpShimmer),
-        HNR: parseNumber(formData.hnr),
-        RPDE: parseNumber(formData.rpde),
-        DFA: parseNumber(formData.dfa),
-        Spread1: parseNumber(formData.spread1),
-        Spread2: parseNumber(formData.spread2),
-        PPE: parseNumber(formData.ppe),
+        MDVP_Fo_Hz: formData.mdvpFo,
+        MDVP_Jitter_percent: formData.mdvpJitter,
+        MDVP_Shimmer: formData.mdvpShimmer,
+        HNR: formData.hnr,
+        RPDE: formData.rpde,
+        DFA: formData.dfa,
+        Spread1: formData.spread1,
+        Spread2: formData.spread2,
+        PPE: formData.ppe,
       };
-
-      // ✅ Check if any value failed parsing
-      if (Object.values(payload).some((val) => val === null)) {
-        toast.error("All values must be valid numbers");
-        setLoading(false);
-        return;
-      }
 
       console.log("📤 Sending payload:", payload);
 
@@ -93,9 +81,10 @@ const VoicePrediction = () => {
       console.log("📡 Response status:", response.status);
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error("❌ Backend error:", errorText);
-        throw new Error("Backend returned error");
+        const errorData = await response.json();
+        console.error("❌ Backend error:", errorData);
+        toast.error(errorData.error || "Backend error");
+        return;
       }
 
       const data = await response.json();
