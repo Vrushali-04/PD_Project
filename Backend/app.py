@@ -1,6 +1,3 @@
-import os
-print("Running file:", __file__)
-print("Current working dir:", os.getcwd())
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
