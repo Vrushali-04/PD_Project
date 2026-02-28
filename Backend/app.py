@@ -157,24 +157,23 @@ def predict_voice_route():
         print("\n🔥 Voice API Called 🔥")
 
         data = request.get_json(force=True)
-        print("📥 Received JSON:", data)
 
         if not data:
             return jsonify({"error": "No JSON data received"}), 400
 
+        # ✅ FIXED FIELD NAMES
         required_fields = [
-            "MDVP_Fo_Hz",
-            "MDVP_Jitter_percent",
-            "MDVP_Shimmer",
-            "HNR",
-            "RPDE",
-            "DFA",
-            "Spread1",
-            "Spread2",
-            "PPE"
+            "mdvpFo",
+            "mdvpJitter",
+            "mdvpShimmer",
+            "hnr",
+            "rpde",
+            "dfa",
+            "spread1",
+            "spread2",
+            "ppe"
         ]
 
-        # Validate fields
         for field in required_fields:
             if field not in data:
                 return jsonify({"error": f"Missing field: {field}"}), 400
@@ -190,19 +189,11 @@ def predict_voice_route():
 
         result = predict_voice(features)
 
-        if not isinstance(result, dict):
-            return jsonify({"error": "Invalid prediction result"}), 500
-
-        print("✅ Voice Prediction Result:", result)
-
         return jsonify(result)
 
     except Exception as e:
         print("❌ Voice Prediction Error:", e)
         return jsonify({"error": "Voice prediction failed"}), 500
-    
-
-
 # ==============================
 # RUN SERVER
 # ==============================
