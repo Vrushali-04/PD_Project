@@ -157,6 +157,7 @@ def predict_voice_route():
         print("\n🔥 Voice API Called 🔥")
 
         data = request.get_json(force=True)
+        print("📥 Received JSON:", data)
 
         if not data:
             return jsonify({"error": "No JSON data received"}), 400
@@ -199,6 +200,7 @@ def predict_voice_route():
     except Exception as e:
         print("❌ Voice Prediction Error:", e)
         return jsonify({"error": "Voice prediction failed"}), 500
+    
 
 
 # ==============================
