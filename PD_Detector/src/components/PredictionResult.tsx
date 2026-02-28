@@ -37,7 +37,7 @@ const PredictionResult: React.FC<PredictionResultProps> = ({
               : "High Probability of Parkinson's Disease"}
           </h3>
           <p className="text-sm font-medium mt-1 opacity-80">
-            Confidence: {(confidence * 100).toFixed(2)}%
+           Confidence: {confidence.toFixed(2)}%
           </p>
         </div>
       </div>
