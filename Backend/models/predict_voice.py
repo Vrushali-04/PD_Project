@@ -23,25 +23,40 @@ print("✅ Voice model loaded successfully")
 
 def predict_voice(input_data):
     try:
-        # Ensure correct feature length
+        # Validate feature length
         if len(input_data) != 9:
-            return {"error": "Expected 9 input features"}
+            return {"error": "Expected exactly 9 input features"}
 
         # Convert to numpy array
-        features = np.array(input_data).reshape(1, -1)
+        features = np.array(input_data, dtype=float).reshape(1, -1)
 
         # Scale features
         features_scaled = scaler.transform(features)
 
-        # Predict
+        # Predict class
         prediction = model.predict(features_scaled)[0]
+
+        # Predict probabilities
         probabilities = model.predict_proba(features_scaled)[0]
 
+        # Confidence = highest probability
         confidence = round(float(np.max(probabilities)) * 100, 2)
 
-        result = "Parkinson's Detected" if prediction == 1 else "Healthy"
+        # 🔎 Debug print (you can remove later)
+        print("Raw Prediction Value:", prediction)
+        print("Probabilities:", probabilities)
 
-        print("Prediction:", result)
+        # ✅ IMPORTANT:
+        # If your training labels were:
+        # 0 = Healthy
+        # 1 = Parkinson
+        result = "detected" if prediction == 1 else "healthy"
+
+        # If output looks reversed after testing,
+        # swap the above line with:
+        # result = "healthy" if prediction == 1 else "detected"
+
+        print("Final Result:", result)
         print("Confidence:", confidence)
 
         return {
@@ -50,5 +65,5 @@ def predict_voice(input_data):
         }
 
     except Exception as e:
-        print("Voice Model Error:", e)
+        print("❌ Voice Model Error:", e)
         return {"error": str(e)}
