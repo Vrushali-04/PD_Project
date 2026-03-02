@@ -37,9 +37,7 @@ def predict_voice(input_data):
         prediction = model.predict(features_scaled)[0]
         probabilities = model.predict_proba(features_scaled)[0]
 
-        print("Probabilities:", probabilities)
-
-        confidence = round(float(probabilities[1]) * 100, 2)    
+        confidence = round(float(np.max(probabilities)) * 100, 2)
 
         result = "Parkinson's Detected" if prediction == 1 else "Healthy"
 
