@@ -50,7 +50,7 @@ def predict_voice(input_data):
         # If your training labels were:
         # 0 = Healthy
         # 1 = Parkinson
-        result = "detected" if prediction == 1 else "healthy"
+        result = "healthy" if prediction == 1 else "detected"
 
         # If output looks reversed after testing,
         # swap the above line with:
