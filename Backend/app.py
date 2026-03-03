@@ -156,40 +156,47 @@ def predict_voice_route():
     try:
         print("\n🔥 Voice API Called 🔥")
 
-        data = request.get_json(force=True)
+        data = request.get_json()
 
         if not data:
             return jsonify({"error": "No JSON data received"}), 400
 
-        # ✅ FIXED FIELD NAMES
-        required_fields = [
-            "mdvpFo",
-            "mdvpJitter",
-            "mdvpShimmer",
-            "hnr",
-            "rpde",
-            "dfa",
-            "spread1",
-            "spread2",
-            "ppe"
+        # ✅ Feature order MUST match training order exactly
+        feature_order = [
+            "mdvpFo",        # MDVP:Fo(Hz)
+            "mdvpJitter",    # MDVP:Jitter(%)
+            "mdvpShimmer",   # MDVP:Shimmer
+            "hnr",           # HNR
+            "rpde",          # RPDE
+            "dfa",           # DFA
+            "spread1",       # spread1
+            "spread2",       # spread2
+            "ppe"            # PPE
         ]
 
-        for field in required_fields:
+        features = []
+
+        for field in feature_order:
             if field not in data:
                 return jsonify({"error": f"Missing field: {field}"}), 400
 
-        features = []
-        for field in required_fields:
             try:
-                features.append(float(data[field]))
-            except ValueError:
+                value = float(data[field])
+                features.append(value)
+            except (ValueError, TypeError):
                 return jsonify({"error": f"Invalid numeric value for {field}"}), 400
 
-        print("📊 Processed Features:", features)
+        print("📊 Final Ordered Features:", features)
 
+        # Call model prediction
         result = predict_voice(features)
 
-        return jsonify(result)
+        if "error" in result:
+            return jsonify(result), 400
+
+        print("✅ Prediction Result:", result)
+
+        return jsonify(result), 200
 
     except Exception as e:
         print("❌ Voice Prediction Error:", e)
