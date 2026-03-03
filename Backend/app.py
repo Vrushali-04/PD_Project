@@ -186,7 +186,7 @@ def predict_voice_route():
             except (ValueError, TypeError):
                 return jsonify({"error": f"Invalid numeric value for {field}"}), 400
 
-        print("📊 Final Ordered Features:", features)
+        #print("📊 Final Ordered Features:", features)
 
         # Call model prediction
         result = predict_voice(features)
