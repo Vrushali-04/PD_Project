@@ -154,22 +154,24 @@ def predict_image_api():
 @app.route("/predict_voice", methods=["POST"])
 def predict_voice_route():
     try:
+        print("\n🔥 Voice API Called 🔥")
+
         data = request.get_json()
 
         if not data:
             return jsonify({"error": "No JSON data received"}), 400
 
-        # Feature order must match training
+        # ✅ Feature order MUST match training order exactly
         feature_order = [
-            "mdvpFo",
-            "mdvpJitter",
-            "mdvpShimmer",
-            "hnr",
-            "rpde",
-            "dfa",
-            "spread1",
-            "spread2",
-            "ppe"
+            "mdvpFo",        # MDVP:Fo(Hz)
+            "mdvpJitter",    # MDVP:Jitter(%)
+            "mdvpShimmer",   # MDVP:Shimmer
+            "hnr",           # HNR
+            "rpde",          # RPDE
+            "dfa",           # DFA
+            "spread1",       # spread1
+            "spread2",       # spread2
+            "ppe"            # PPE
         ]
 
         features = []
@@ -179,21 +181,25 @@ def predict_voice_route():
                 return jsonify({"error": f"Missing field: {field}"}), 400
 
             try:
-                features.append(float(data[field]))
+                value = float(data[field])
+                features.append(value)
             except (ValueError, TypeError):
                 return jsonify({"error": f"Invalid numeric value for {field}"}), 400
 
+        print("📊 Final Ordered Features:", features)
+
+        # Call model prediction
         result = predict_voice(features)
 
         if "error" in result:
             return jsonify(result), 400
 
-        # ✅ ONLY THIS WILL PRINT
         print("✅ Prediction Result:", result)
 
         return jsonify(result), 200
 
-    except Exception:
+    except Exception as e:
+        print("❌ Voice Prediction Error:", e)
         return jsonify({"error": "Voice prediction failed"}), 500
 # ==============================
 # RUN SERVER
