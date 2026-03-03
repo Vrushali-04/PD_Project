@@ -1,5 +1,6 @@
 import pickle
 import numpy as np
+import pandas as pd
 import os
 
 # ==============================
@@ -11,11 +12,27 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 model_path = os.path.join(BASE_DIR, "svm_voice_model.pkl")
 scaler_path = os.path.join(BASE_DIR, "voice_scaler.pkl")
 
-model = pickle.load(open(model_path, "rb"))
-scaler = pickle.load(open(scaler_path, "rb"))
+with open(model_path, "rb") as f:
+    model = pickle.load(f)
 
-print("✅ Voice model loaded successfully")
+with open(scaler_path, "rb") as f:
+    scaler = pickle.load(f)
 
+# ==============================
+# FEATURE NAMES (MUST MATCH TRAINING)
+# ==============================
+
+feature_names = [
+    "MDVP:Fo(Hz)",
+    "MDVP:Jitter(%)",
+    "MDVP:Shimmer",
+    "HNR",
+    "RPDE",
+    "DFA",
+    "spread1",
+    "spread2",
+    "PPE"
+]
 
 # ==============================
 # PREDICTION FUNCTION
@@ -27,14 +44,17 @@ def predict_voice(input_data):
         if len(input_data) != 9:
             return {"error": "Expected exactly 9 input features"}
 
-        # Convert to numpy array
-        features = np.array(input_data, dtype=float).reshape(1, -1)
+        # Convert to DataFrame (fixes sklearn feature-name warning)
+        features_df = pd.DataFrame(
+            [input_data],
+            columns=feature_names
+        )
 
         # Scale features
-        features_scaled = scaler.transform(features)
+        features_scaled = scaler.transform(features_df)
 
         # Predict class
-        prediction = model.predict(features_scaled)[0]
+        prediction = int(model.predict(features_scaled)[0])
 
         # Predict probabilities
         probabilities = model.predict_proba(features_scaled)[0]
@@ -42,22 +62,10 @@ def predict_voice(input_data):
         # Confidence = highest probability
         confidence = round(float(np.max(probabilities)) * 100, 2)
 
-        # 🔎 Debug print (you can remove later)
-       
-        #print("Probabilities:", probabilities)
-
-        # ✅ IMPORTANT:
-        # If your training labels were:
+        # ✅ Correct mapping (Original UCI dataset)
         # 0 = Healthy
         # 1 = Parkinson
-        result = "healthy" if prediction == 1 else "detected"
-
-        # If output looks reversed after testing,
-        # swap the above line with:
-        # result = "healthy" if prediction == 1 else "detected"
-
-        #print("Final Result:", result)
-        #print("Confidence:", confidence)
+        result = "detected" if prediction == 1 else "healthy"
 
         return {
             "prediction": result,
@@ -65,5 +73,4 @@ def predict_voice(input_data):
         }
 
     except Exception as e:
-        print("❌ Voice Model Error:", e)
         return {"error": str(e)}
