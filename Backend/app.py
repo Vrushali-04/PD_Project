@@ -154,7 +154,7 @@ def predict_image_api():
 @app.route("/predict_voice", methods=["POST"])
 def predict_voice_route():
     try:
-        print("\n🔥 Voice API Called 🔥")
+        #print("\n🔥 Voice API Called 🔥")
 
         data = request.get_json()
 
