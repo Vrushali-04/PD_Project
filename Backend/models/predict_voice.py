@@ -56,8 +56,8 @@ def predict_voice(input_data):
         # swap the above line with:
         # result = "healthy" if prediction == 1 else "detected"
 
-        print("Final Result:", result)
-        print("Confidence:", confidence)
+        #print("Final Result:", result)
+        #print("Confidence:", confidence)
 
         return {
             "prediction": result,
