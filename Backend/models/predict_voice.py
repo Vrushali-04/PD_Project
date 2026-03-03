@@ -43,8 +43,8 @@ def predict_voice(input_data):
         confidence = round(float(np.max(probabilities)) * 100, 2)
 
         # 🔎 Debug print (you can remove later)
-        print("Raw Prediction Value:", prediction)
-        print("Probabilities:", probabilities)
+       
+        #print("Probabilities:", probabilities)
 
         # ✅ IMPORTANT:
         # If your training labels were:

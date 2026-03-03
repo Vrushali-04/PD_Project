@@ -3,11 +3,13 @@ import numpy as np
 import pickle
 import os
 
-from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score, StratifiedKFold
+from sklearn.model_selection import train_test_split, GridSearchCV, StratifiedKFold
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score, classification_report, roc_auc_score
 from sklearn.pipeline import Pipeline
+from imblearn.pipeline import Pipeline as ImbPipeline
+from imblearn.over_sampling import SMOTE
 
 # ==============================
 # CREATE MODELS FOLDER
@@ -38,10 +40,10 @@ features = [
 X = data[features]
 y = data['status']  # 0 = Healthy, 1 = Parkinson
 
-print("Class Distribution:\n", y.value_counts())
+print("Original Class Distribution:\n", y.value_counts())
 
 # ==============================
-# TRAIN TEST SPLIT (Stratified)
+# TRAIN TEST SPLIT
 # ==============================
 X_train, X_test, y_train, y_test = train_test_split(
     X, y,
@@ -51,9 +53,10 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # ==============================
-# PIPELINE (Prevents Data Leakage)
+# PIPELINE WITH SMOTE + SCALER + SVM
 # ==============================
-pipeline = Pipeline([
+pipeline = ImbPipeline([
+    ('smote', SMOTE(random_state=42)),
     ('scaler', StandardScaler()),
     ('svm', SVC(probability=True, class_weight='balanced'))
 ])
@@ -62,8 +65,8 @@ pipeline = Pipeline([
 # GRID SEARCH
 # ==============================
 param_grid = {
-    'svm__C': [1, 5, 10, 20, 50, 100],
-    'svm__gamma': ['scale', 0.1, 0.01, 0.001],
+    'svm__C': [1, 10, 50, 100],
+    'svm__gamma': ['scale', 0.1, 0.01],
     'svm__kernel': ['rbf']
 }
 
@@ -92,30 +95,17 @@ y_proba = best_model.predict_proba(X_test)[:, 1]
 accuracy = accuracy_score(y_test, y_pred)
 roc_auc = roc_auc_score(y_test, y_proba)
 
-print("\n✅ Voice Model Training Completed!")
+print("\n✅ Training Completed!")
 print(f"Test Accuracy: {accuracy * 100:.2f}%")
 print(f"ROC-AUC Score: {roc_auc:.4f}")
 print("\nClassification Report:\n", classification_report(y_test, y_pred))
-
-# ==============================
-# 10-FOLD CROSS VALIDATION
-# ==============================
-cv_scores = cross_val_score(
-    best_model,
-    X,
-    y,
-    cv=10,
-    scoring='roc_auc'
-)
-
-print(f"\n10-Fold Cross Validation ROC-AUC: {cv_scores.mean():.4f}")
 
 # ==============================
 # FINAL TRAINING ON FULL DATA
 # ==============================
 best_model.fit(X, y)
 
-# Extract trained scaler separately (needed for backend)
+# Extract trained scaler and svm for backend
 final_scaler = best_model.named_steps['scaler']
 final_svm = best_model.named_steps['svm']
 
@@ -125,4 +115,4 @@ final_svm = best_model.named_steps['svm']
 pickle.dump(final_svm, open("models/svm_voice_model.pkl", "wb"))
 pickle.dump(final_scaler, open("models/voice_scaler.pkl", "wb"))
 
-print("\n✅ Optimized Model and Scaler saved in /models folder.")
+print("\n✅ Optimized Model with SMOTE saved in /models folder.")
