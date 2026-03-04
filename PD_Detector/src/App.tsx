@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
@@ -13,9 +13,9 @@ import Signup from "./pages/Signup";
 const queryClient = new QueryClient();
 
 /*
-  ROUTING STRUCTURE:
+  UPDATED ROUTING STRUCTURE:
 
-  /            → Redirect to /login
+  /            → Signup page (default)
   /login       → Login page
   /signup      → Signup page
   /home        → Dashboard
@@ -34,8 +34,8 @@ function App() {
         <BrowserRouter>
           <Routes>
 
-            {/* Default Route */}
-            <Route path="/" element={<Navigate to="/login" replace />} />
+            {/* Default Route - Opens Signup First */}
+            <Route path="/" element={<Signup />} />
 
             {/* Auth Routes */}
             <Route path="/login" element={<Login />} />
