@@ -9,6 +9,7 @@ const Signup = () => {
     email: "",
     password: "",
   });
+
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -57,47 +58,54 @@ const Signup = () => {
   };
 
   return (
-    <div
-      className="min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center"
-      style={{
-        backgroundImage:
-          "url('https://images.pexels.com/photos/8401642/pexels-photo-8401642.jpeg?auto=compress&cs=tinysrgb&w=1920')",
-      }}
-    >
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/50"></div>
+    <div className="min-h-screen bg-gray-100 flex">
 
-      {/* Main Content */}
-      <div className="relative z-10 w-full max-w-6xl flex lg:flex-row flex-col items-center">
+      {/* LEFT SIDE - LANDING */}
+      <div className="hidden lg:flex w-1/2 bg-white px-16 py-20 flex-col justify-center">
 
-        {/* Left Hero Text */}
-        <div className="lg:w-1/2 px-10 py-16 text-white">
-          <h1 className="text-5xl font-bold mb-6 leading-tight">
-            AI-Powered Parkinson’s Detection
-          </h1>
+        <h1 className="text-4xl font-bold text-gray-800 leading-tight mb-6">
+          AI-Based Parkinson’s Detection
+        </h1>
 
-          <p className="text-lg text-gray-200 mb-6 max-w-lg">
-            Our advanced machine learning platform analyzes voice and medical
-            imaging data to support early Parkinson’s disease detection.
-            Empowering healthcare with intelligent diagnostic tools.
-          </p>
+        <p className="text-gray-600 text-lg mb-8 max-w-md">
+          Advanced machine learning algorithms analyze voice signals 
+          and MRI brain scans to assist in early detection of 
+          Parkinson’s disease with clinical accuracy.
+        </p>
 
-          <p className="text-gray-300 text-sm">
+        {/* PROPER MEDICAL MRI IMAGE */}
+        <img
+          src="https://images.pexels.com/photos/7088523/pexels-photo-7088523.jpeg?auto=compress&cs=tinysrgb&w=1200"
+          alt="Brain MRI Scan"
+          className="rounded-xl shadow-lg w-full max-w-md object-cover"
+        />
+
+        <div className="mt-10">
+          <p className="text-gray-600 mb-1">
             Already have an account?
           </p>
           <Link
             to="/login"
-            className="text-blue-300 font-semibold hover:underline"
+            className="text-blue-600 font-semibold hover:underline"
           >
             Sign In
           </Link>
         </div>
 
-        {/* Right Signup Form */}
-        <div className="lg:w-1/2 bg-white rounded-3xl shadow-2xl p-10 mx-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6">
+      </div>
+
+      {/* RIGHT SIDE - SIGNUP FORM */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6">
+
+        <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">
             Create Account
           </h2>
+
+          <p className="text-gray-500 text-sm mb-6">
+            Register to access the diagnostic system
+          </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
 
@@ -110,7 +118,7 @@ const Signup = () => {
                 onChange={handleChange}
                 required
                 placeholder="Full Name"
-                className="w-full pl-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600"
+                className="w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
             </div>
 
@@ -123,7 +131,7 @@ const Signup = () => {
                 onChange={handleChange}
                 required
                 placeholder="Email Address"
-                className="w-full pl-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600"
+                className="w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
             </div>
 
@@ -136,7 +144,7 @@ const Signup = () => {
                 onChange={handleChange}
                 required
                 placeholder="Password"
-                className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600"
+                className="w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
               <button
                 type="button"
@@ -150,14 +158,14 @@ const Signup = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition"
+              className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition duration-200 disabled:opacity-50"
             >
               {loading ? "Creating Account..." : "Create Account"}
             </button>
 
           </form>
 
-          <div className="mt-5 text-center text-sm text-gray-600">
+          <div className="mt-6 text-center text-sm text-gray-600">
             Already have an account?{" "}
             <Link
               to="/login"
@@ -166,8 +174,8 @@ const Signup = () => {
               Sign In
             </Link>
           </div>
-        </div>
 
+        </div>
       </div>
     </div>
   );
