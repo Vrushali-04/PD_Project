@@ -60,7 +60,7 @@ const Signup = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex">
 
-      {/* LEFT SIDE - LANDING CONTENT */}
+      {/* LEFT SIDE - LANDING */}
       <div className="hidden lg:flex w-1/2 bg-white px-16 py-20 flex-col justify-center">
 
         <h1 className="text-4xl font-bold text-gray-800 leading-tight mb-6">
@@ -68,15 +68,15 @@ const Signup = () => {
         </h1>
 
         <p className="text-gray-600 text-lg mb-8 max-w-md">
-          Our intelligent system analyzes voice patterns and medical
-          imaging data using advanced Machine Learning models to assist
-          in early detection of Parkinson’s disease.
+          Advanced machine learning algorithms analyze voice signals 
+          and MRI brain scans to assist in early detection of 
+          Parkinson’s disease with clinical accuracy.
         </p>
 
-        {/* HD WORKING IMAGE */}
+        {/* PROPER MEDICAL MRI IMAGE */}
         <img
-          src="https://images.pexels.com/photos/3825581/pexels-photo-3825581.jpeg?auto=compress&cs=tinysrgb&w=1200"
-          alt="AI Brain Medical"
+          src="https://images.pexels.com/photos/7088523/pexels-photo-7088523.jpeg?auto=compress&cs=tinysrgb&w=1200"
+          alt="Brain MRI Scan"
           className="rounded-xl shadow-lg w-full max-w-md object-cover"
         />
 
@@ -109,7 +109,6 @@ const Signup = () => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
 
-            {/* Full Name */}
             <div className="relative">
               <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
@@ -123,7 +122,6 @@ const Signup = () => {
               />
             </div>
 
-            {/* Email */}
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
@@ -137,7 +135,6 @@ const Signup = () => {
               />
             </div>
 
-            {/* Password */}
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
@@ -158,7 +155,6 @@ const Signup = () => {
               </button>
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
@@ -181,7 +177,6 @@ const Signup = () => {
 
         </div>
       </div>
-
     </div>
   );
 };
