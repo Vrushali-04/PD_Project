@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 
-const Login = () => {
+interface LoginProps {
+  switchToSignup: () => void;
+}
+
+const Login = ({ switchToSignup }: LoginProps) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -39,7 +43,7 @@ const Login = () => {
 
       if (response.ok) {
 
-        // ✅ Save login session
+        // Save user session
         localStorage.setItem("user", JSON.stringify(data));
 
         toast({
@@ -48,7 +52,6 @@ const Login = () => {
           className: "bg-green-50 border-green-200",
         });
 
-        // ✅ Redirect immediately
         navigate("/home");
 
       } else {
@@ -180,14 +183,14 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Signup */}
+            {/* Signup Switch */}
             <div className="text-center">
-              <Link
-                to="/signup"
+              <button
+                onClick={switchToSignup}
                 className="inline-block w-full px-5 py-2.5 border-2 border-cyan-500 text-cyan-600 font-bold rounded-lg hover:bg-cyan-50 transition-all duration-200 text-sm"
               >
                 Create New Account
-              </Link>
+              </button>
             </div>
 
           </div>
