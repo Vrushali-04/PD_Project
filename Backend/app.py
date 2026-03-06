@@ -219,33 +219,32 @@ def predict_voice_route():
 # SPIRAL HANDWRITING PREDICTION
 # ==============================
 
-@app.route("/predict-spiral", methods=["POST"])
+@app.route("/predict_spiral", methods=["POST"])
 def predict_spiral_route():
+
+    if "image" not in request.files:
+        return jsonify({"error": "No image uploaded"}), 400
+
+    file = request.files["image"]
+
+    if file.filename == "":
+        return jsonify({"error": "Empty filename"}), 400
+
     try:
-        # check if file is uploaded
-        if "file" not in request.files:
-            return jsonify({"error": "No file uploaded"}), 400
-
-        file = request.files["file"]
-
-        if file.filename == "":
-            return jsonify({"error": "Empty filename"}), 400
-
-        # save uploaded image
         file_path = os.path.join(app.config["UPLOAD_FOLDER"], file.filename)
         file.save(file_path)
 
-        # run prediction
+        print("✍️ Spiral Image Received:", file.filename)
+
         result = predict_spiral(file_path)
 
-        return jsonify({
-            "result": result
-        })
+        os.remove(file_path)
+
+        return jsonify(result)
 
     except Exception as e:
-        return jsonify({
-            "error": str(e)
-        }), 500
+        print("❌ Spiral Prediction Error:", e)
+        return jsonify({"error": "Failed to process spiral image"}), 500
 # ==============================
 # RUN SERVER
 # ==============================
