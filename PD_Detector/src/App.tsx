@@ -1,6 +1,5 @@
 import Prediction from "./pages/Prediction";
 import VoicePrediction from "./components/VoicePrediction";
-import SpiralPrediction from "./components/SpiralPrediction";
 
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -17,16 +16,15 @@ import Signup from "./pages/Signup";
 const queryClient = new QueryClient();
 
 /*
-UPDATED ROUTING STRUCTURE
+UPDATED ROUTING STRUCTURE:
 
-/            → Signup page
-/login       → Login page
-/signup      → Signup page
-/home        → Dashboard
-/predict     → Brain MRI prediction
-/voice       → Voice prediction
-/spiral      → Spiral handwriting prediction
-*            → 404 page
+/        → Signup page (default)
+/login   → Login page
+/signup  → Signup page
+/home    → Dashboard
+/predict → Image prediction page
+/voice   → Voice prediction page
+*        → 404 page
 */
 
 function App() {
@@ -38,32 +36,26 @@ function App() {
 
         <BrowserRouter>
           <Routes>
-
-            {/* Default Route */}
+            {/* Default Route - Opens Signup First */}
             <Route path="/" element={<Signup />} />
 
-            {/* Authentication */}
+            {/* Auth Routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
 
-            {/* Dashboard */}
+            {/* Main Pages */}
             <Route path="/home" element={<Index />} />
 
-            {/* Brain MRI Prediction */}
+            {/* Image Prediction */}
             <Route path="/predict" element={<Prediction />} />
 
             {/* Voice Prediction */}
             <Route path="/voice" element={<VoicePrediction />} />
 
-            {/* Spiral Handwriting Prediction */}
-            <Route path="/spiral" element={<SpiralPrediction />} />
-
             {/* 404 Page */}
             <Route path="*" element={<NotFound />} />
-
           </Routes>
         </BrowserRouter>
-
       </TooltipProvider>
     </QueryClientProvider>
   );
