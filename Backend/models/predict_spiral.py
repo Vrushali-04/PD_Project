@@ -92,12 +92,12 @@ def predict_spiral(image_path):
         prediction = model.predict(img)[0][0]
 
         if prediction > 0.5:
-            result = "parkinson"
+            result = "healthy"
             confidence = float(prediction * 100)
         else:
-            result = "healthy"
+            result = "parkinson"
             confidence = float((1 - prediction) * 100)
-
+        
         return {
             "prediction": result,
             "confidence": round(confidence, 2)
