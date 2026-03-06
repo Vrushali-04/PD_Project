@@ -221,26 +221,45 @@ def predict_voice_route():
 
 @app.route("/predict_spiral", methods=["POST"])
 def predict_spiral_route():
-
-    if "image" not in request.files:
-        return jsonify({"error": "No image uploaded"}), 400
-
-    file = request.files["image"]
-
-    if file.filename == "":
-        return jsonify({"error": "Empty filename"}), 400
-
     try:
+        # Check if image is present
+        if "image" not in request.files:
+            return jsonify({"error": "No image uploaded"}), 400
+
+        file = request.files["image"]
+
+        # Check filename
+        if file.filename == "":
+            return jsonify({"error": "Empty filename"}), 400
+
+        # Allow only image files
+        allowed_extensions = {"png", "jpg", "jpeg"}
+
+        file_ext = file.filename.rsplit(".", 1)[-1].lower()
+
+        if file_ext not in allowed_extensions:
+            return jsonify({"error": "Invalid file type. Upload PNG/JPG/JPEG"}), 400
+
+        # Save file
         file_path = os.path.join(app.config["UPLOAD_FOLDER"], file.filename)
         file.save(file_path)
 
         print("✍️ Spiral Image Received:", file.filename)
 
+        # Run prediction
         result = predict_spiral(file_path)
 
-        os.remove(file_path)
+        # Delete file after prediction
+        if os.path.exists(file_path):
+            os.remove(file_path)
 
-        return jsonify(result)
+        # Validate result
+        if not isinstance(result, dict):
+            return jsonify({"error": "Invalid prediction result"}), 500
+
+        print("✅ Spiral Prediction:", result)
+
+        return jsonify(result), 200
 
     except Exception as e:
         print("❌ Spiral Prediction Error:", e)
