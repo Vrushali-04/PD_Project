@@ -5,6 +5,7 @@ import bcrypt
 from db import db
 from models.predict_image import predict_image
 from models.predict_voice import predict_voice
+from models.predict_spiral import predict_spiral
 
 # ==============================
 # CONFIG
@@ -213,6 +214,38 @@ def predict_voice_route():
     except Exception as e:
         print("❌ Voice Prediction Error:", e)
         return jsonify({"error": "Voice prediction failed"}), 500
+    
+# ==============================
+# SPIRAL HANDWRITING PREDICTION
+# ==============================
+
+@app.route("/predict-spiral", methods=["POST"])
+def predict_spiral_route():
+    try:
+        # check if file is uploaded
+        if "file" not in request.files:
+            return jsonify({"error": "No file uploaded"}), 400
+
+        file = request.files["file"]
+
+        if file.filename == "":
+            return jsonify({"error": "Empty filename"}), 400
+
+        # save uploaded image
+        file_path = os.path.join(app.config["UPLOAD_FOLDER"], file.filename)
+        file.save(file_path)
+
+        # run prediction
+        result = predict_spiral(file_path)
+
+        return jsonify({
+            "result": result
+        })
+
+    except Exception as e:
+        return jsonify({
+            "error": str(e)
+        }), 500
 # ==============================
 # RUN SERVER
 # ==============================
