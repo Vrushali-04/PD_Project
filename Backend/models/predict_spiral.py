@@ -1,147 +1,95 @@
-# ============================================
-# SPIRAL HANDWRITING PREDICTION SCRIPT
-# Parkinson's Disease Detection
-# ============================================
+# =====================================================
+# SPIRAL PREDICTION SCRIPT
+# =====================================================
 
 import os
 import numpy as np
 import cv2
-from tensorflow.keras.models import load_model
+import tensorflow as tf
 
-# ============================================
-# LOAD TRAINED MODEL
-# ============================================
+# =====================================================
+# LOAD MODEL
+# =====================================================
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-MODEL_PATH = os.path.join(BASE_DIR, "..", "saved_models", "best_spiral_model.h5")
+MODEL_PATH = os.path.join(
+    BASE_DIR,
+    "..",
+    "saved_models",
+    "best_spiral_model.keras"
+)
 
-# Check model exists
 if not os.path.exists(MODEL_PATH):
-    raise FileNotFoundError(f"Model file not found at: {MODEL_PATH}")
+    raise FileNotFoundError("Model not found!")
 
-# Load CNN model
-model = load_model(MODEL_PATH)
+model = tf.keras.models.load_model(MODEL_PATH)
 
-print("✅ Spiral Model Loaded Successfully")
+print("✅ Model Loaded Successfully")
 
+IMG_SIZE = 224
+THRESHOLD = 0.5  # You can adjust later
 
-# ============================================
-# IMAGE PREPROCESSING
-# ============================================
+# =====================================================
+# PREPROCESS
+# =====================================================
 
-def preprocess_image(image_path):
-    """
-    Load image and convert it to model input format
-    """
+def preprocess(image_path):
 
     img = cv2.imread(image_path)
 
     if img is None:
-        raise ValueError("Invalid image file. Cannot read image.")
+        raise ValueError("Invalid image")
 
-    # Resize image to model input size
-    img = cv2.resize(img, (224, 224))
-
-    # Convert BGR to RGB
+    img = cv2.resize(img, (IMG_SIZE, IMG_SIZE))
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-
-    # Normalize pixel values
     img = img.astype("float32") / 255.0
-
-    # Add batch dimension
     img = np.expand_dims(img, axis=0)
 
     return img
 
 
-# ============================================
-# SPIRAL IMAGE VALIDATION
-# ============================================
-
-def validate_spiral_image(image_path):
-    """
-    Basic check if uploaded image contains drawing lines
-    """
-
-    img = cv2.imread(image_path, 0)
-
-    if img is None:
-        return False
-
-    edges = cv2.Canny(img, 50, 150)
-
-    edge_pixels = np.sum(edges > 0)
-
-    # Very low edges → probably not a drawing
-    if edge_pixels < 500:
-        return False
-
-    return True
-
-
-# ============================================
-# PREDICTION FUNCTION
-# ============================================
+# =====================================================
+# PREDICTION
+# =====================================================
 
 def predict_spiral(image_path):
-    """
-    Predict Parkinson's Disease using spiral drawing
-    """
 
     if not os.path.exists(image_path):
-        return {"error": "Image file not found."}
+        return {"error": "Image not found"}
 
-    try:
+    img = preprocess(image_path)
 
-        # Validate drawing
-        if not validate_spiral_image(image_path):
-            return {
-                "error": "Uploaded image does not appear to be a valid spiral drawing."
-            }
+    prediction = model.predict(img)[0][0]
 
-        # Preprocess image
-        img = preprocess_image(image_path)
+    print("Raw Model Output:", prediction)
 
-        # Run prediction
-        prediction = model.predict(img)[0][0]
+    if prediction >= THRESHOLD:
+        result = "parkinson"
+        confidence = prediction * 100
+    else:
+        result = "healthy"
+        confidence = (1 - prediction) * 100
 
-        print("Raw prediction value:", prediction)
-
-        # Convert prediction to label
-        if prediction >= 0.5:
-            result = "parkinson"
-            confidence = float(prediction * 100)
-        else:
-            result = "healthy"
-            confidence = float((1 - prediction) * 100)
-
-        return {
-            "prediction": result,
-            "confidence": round(confidence, 2)
-        }
-
-    except Exception as e:
-        return {"error": str(e)}
+    return {
+        "prediction": result,
+        "confidence": round(float(confidence), 2)
+    }
 
 
-# ============================================
-# COMMAND LINE TESTING
-# ============================================
+# =====================================================
+# CLI TEST
+# =====================================================
 
 if __name__ == "__main__":
 
     import sys
 
     if len(sys.argv) < 2:
-        print("Usage:")
-        print("python models/predict_spiral.py <image_path>")
+        print("Usage: python predict_spiral.py image.jpg")
         exit()
 
-    image_path = sys.argv[1]
-
-    result = predict_spiral(image_path)
+    output = predict_spiral(sys.argv[1])
 
     print("\nPrediction Result:")
-    print(result)
-    print(model.summary())
+    print(output)
