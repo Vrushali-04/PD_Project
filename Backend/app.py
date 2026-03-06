@@ -110,7 +110,19 @@ def login():
         print("❌ Login Error:", e)
         return jsonify({"message": "Server error during login"}), 500
 
+@app.route("/users", methods=["GET"])
+def get_users():
+    try:
+        cursor = db.cursor(dictionary=True)
+        cursor.execute("SELECT id, name, email FROM users")
+        users = cursor.fetchall()
 
+        return jsonify(users)
+
+    except Exception as e:
+        print("Error:", e)
+        return jsonify({"message": "Error fetching users"}), 500
+    
 # ==============================
 # 🖼️ IMAGE PREDICTION
 # ==============================
