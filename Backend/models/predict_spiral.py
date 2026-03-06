@@ -90,6 +90,7 @@ def predict_spiral(image_path):
         img = preprocess_image(image_path)
 
         prediction = model.predict(img)[0][0]
+        print("Raw prediction value:", prediction)
 
         if prediction > 0.5:
             result = "parkinson"
