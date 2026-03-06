@@ -1,13 +1,14 @@
 # ===============================================
-# SPIRAL HANDWRITING TRAINING SCRIPT
-# Parkinson's Disease Detection
+# SPIRAL PARKINSON DETECTION TRAINING
+# Using Transfer Learning (MobileNetV2)
 # ===============================================
 
 import os
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, BatchNormalization
+from tensorflow.keras.applications import MobileNetV2
+from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Dropout
+from tensorflow.keras.models import Model
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 
 # ===============================================
@@ -38,26 +39,25 @@ os.makedirs(os.path.dirname(MODEL_SAVE_PATH), exist_ok=True)
 # PARAMETERS
 # ===============================================
 
-IMG_SIZE = 128
-BATCH_SIZE = 16
-EPOCHS = 20
+IMG_SIZE = 224
+BATCH_SIZE = 8
+EPOCHS = 25
 
 # ===============================================
-# DATA GENERATORS
+# DATA GENERATOR
 # ===============================================
 
-train_datagen = ImageDataGenerator(
+datagen = ImageDataGenerator(
     rescale=1./255,
     validation_split=0.2,
 
-    rotation_range=10,
-    zoom_range=0.1,
-    width_shift_range=0.05,
-    height_shift_range=0.05,
-    horizontal_flip=False
+    rotation_range=15,
+    zoom_range=0.2,
+    width_shift_range=0.1,
+    height_shift_range=0.1
 )
 
-train_generator = train_datagen.flow_from_directory(
+train_generator = datagen.flow_from_directory(
     DATASET_PATH,
     target_size=(IMG_SIZE, IMG_SIZE),
     batch_size=BATCH_SIZE,
@@ -65,7 +65,7 @@ train_generator = train_datagen.flow_from_directory(
     subset="training"
 )
 
-validation_generator = train_datagen.flow_from_directory(
+val_generator = datagen.flow_from_directory(
     DATASET_PATH,
     target_size=(IMG_SIZE, IMG_SIZE),
     batch_size=BATCH_SIZE,
@@ -73,42 +73,42 @@ validation_generator = train_datagen.flow_from_directory(
     subset="validation"
 )
 
-print("\nClass Labels:", train_generator.class_indices)
+print("Class labels:", train_generator.class_indices)
 
 # ===============================================
-# CNN MODEL
+# LOAD PRETRAINED MODEL
 # ===============================================
 
-model = Sequential([
+base_model = MobileNetV2(
+    weights="imagenet",
+    include_top=False,
+    input_shape=(IMG_SIZE, IMG_SIZE, 3)
+)
 
-    Conv2D(32,(3,3),activation='relu',input_shape=(IMG_SIZE,IMG_SIZE,3)),
-    BatchNormalization(),
-    MaxPooling2D(2,2),
-
-    Conv2D(64,(3,3),activation='relu'),
-    BatchNormalization(),
-    MaxPooling2D(2,2),
-
-    Conv2D(128,(3,3),activation='relu'),
-    BatchNormalization(),
-    MaxPooling2D(2,2),
-
-    Flatten(),
-
-    Dense(128,activation='relu'),
-    Dropout(0.5),
-
-    Dense(1,activation='sigmoid')
-])
+base_model.trainable = False
 
 # ===============================================
-# COMPILE MODEL
+# ADD CLASSIFICATION LAYER
+# ===============================================
+
+x = base_model.output
+x = GlobalAveragePooling2D()(x)
+
+x = Dense(128, activation="relu")(x)
+x = Dropout(0.5)(x)
+
+predictions = Dense(1, activation="sigmoid")(x)
+
+model = Model(inputs=base_model.input, outputs=predictions)
+
+# ===============================================
+# COMPILE
 # ===============================================
 
 model.compile(
-    optimizer='adam',
-    loss='binary_crossentropy',
-    metrics=['accuracy']
+    optimizer="adam",
+    loss="binary_crossentropy",
+    metrics=["accuracy"]
 )
 
 model.summary()
@@ -119,13 +119,13 @@ model.summary()
 
 checkpoint = ModelCheckpoint(
     MODEL_SAVE_PATH,
-    monitor='val_accuracy',
+    monitor="val_accuracy",
     save_best_only=True,
     verbose=1
 )
 
 early_stop = EarlyStopping(
-    monitor='val_loss',
+    monitor="val_loss",
     patience=5,
     restore_best_weights=True
 )
@@ -135,21 +135,19 @@ early_stop = EarlyStopping(
 # ===============================================
 
 history = model.fit(
-
     train_generator,
-    validation_data=validation_generator,
+    validation_data=val_generator,
     epochs=EPOCHS,
     callbacks=[checkpoint, early_stop]
-
 )
 
-print("\n✅ Training Completed")
-print("Best model saved at:", MODEL_SAVE_PATH)
+print("\nTraining Finished")
+print("Model saved at:", MODEL_SAVE_PATH)
 
 # ===============================================
-# FINAL ACCURACY
+# FINAL EVALUATION
 # ===============================================
 
-loss, acc = model.evaluate(validation_generator)
+loss, acc = model.evaluate(val_generator)
 
 print("\nValidation Accuracy:", round(acc*100,2),"%")
