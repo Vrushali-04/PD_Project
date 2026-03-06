@@ -5,7 +5,7 @@ import { Loader2, Mic, Image, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import VoiceFeatureInputs from "./VoiceFeatureInputs";
 import ImageUpload from "./ImageUpload";
-import DrawingCanvas from "./DrawingCanvas";
+import DrawingCanvas from "./SpiralUpload";
 import PredictionResult from "./PredictionResult";
 
 interface FormData {

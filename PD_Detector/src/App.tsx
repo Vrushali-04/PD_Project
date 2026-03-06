@@ -1,5 +1,6 @@
 import Prediction from "./pages/Prediction";
 import VoicePrediction from "./components/VoicePrediction";
+import SpiralUpload from "./components/SpiralUpload"; // ⭐ ADD THIS
 
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -22,8 +23,9 @@ UPDATED ROUTING STRUCTURE:
 /login   → Login page
 /signup  → Signup page
 /home    → Dashboard
-/predict → Image prediction page
-/voice   → Voice prediction page
+/predict → MRI Image prediction
+/voice   → Voice prediction
+/spiral  → Spiral drawing prediction ⭐ NEW
 *        → 404 page
 */
 
@@ -36,24 +38,29 @@ function App() {
 
         <BrowserRouter>
           <Routes>
-            {/* Default Route - Opens Signup First */}
+
+            {/* Default Route */}
             <Route path="/" element={<Signup />} />
 
             {/* Auth Routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
 
-            {/* Main Pages */}
+            {/* Dashboard */}
             <Route path="/home" element={<Index />} />
 
-            {/* Image Prediction */}
+            {/* MRI Image Prediction */}
             <Route path="/predict" element={<Prediction />} />
 
             {/* Voice Prediction */}
             <Route path="/voice" element={<VoicePrediction />} />
 
+            {/* ⭐ Spiral Drawing Prediction */}
+            <Route path="/spiral" element={<SpiralUpload />} />
+
             {/* 404 Page */}
             <Route path="*" element={<NotFound />} />
+
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
