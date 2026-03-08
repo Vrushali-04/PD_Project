@@ -85,11 +85,10 @@ The models are evaluated using the following metrics:
 These metrics ensure that the models are robust, reliable, and generalize well to unseen data.
 
 🌐 Web Application Architecture
-🔹 Frontend (Client Side)
 
-Built using React.js with modern UI tools.
+🔹 Frontend (Client Side): Built using React.js with modern UI tools.
 
-Features
+Features : 
 
 Upload voice recordings
 
@@ -101,11 +100,9 @@ Display prediction results instantly
 
 Responsive and interactive UI
 
-🔹 Backend (Server Side)
+🔹 Backend (Server Side): Developed using Flask (Python).
 
-Developed using Flask (Python).
-
-Backend Responsibilities
+Backend Responsibilities : 
 
 Handling API requests
 
