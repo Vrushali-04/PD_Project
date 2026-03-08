@@ -91,6 +91,10 @@ history = model.fit(
 # SAVE MODEL
 # ======================
 
-model.save("spiral_parkinson_model.h5")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-print("Model saved successfully!")
+MODEL_PATH = os.path.join(BASE_DIR, "models", "spiral_parkinson_model.h5")
+
+model.save(MODEL_PATH)
+
+print("✅ Model saved at:", MODEL_PATH)
