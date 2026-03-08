@@ -65,10 +65,10 @@ def predict_spiral(image_path):
     print("Raw Model Output:", prediction)
 
     if prediction >= THRESHOLD:
-        result = "parkinson"
+        result = "healthy"
         confidence = prediction * 100
     else:
-        result = "healthy"
+        result = "parkinson"
         confidence = (1 - prediction) * 100
 
     return {
