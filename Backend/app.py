@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
 import bcrypt
+import uuid
+
 from db import db
 from models.predict_image import predict_image
 from models.predict_voice import predict_voice
@@ -57,9 +59,9 @@ def signup():
 
         cursor = db.cursor(dictionary=True)
 
-        # Check if email already exists
         cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
         existing_user = cursor.fetchone()
+
         if existing_user:
             return jsonify({"message": "Email already registered"}), 400
 
@@ -100,16 +102,18 @@ def login():
 
         if user and bcrypt.checkpw(password.encode(), user["password"].encode()):
             print("✅ Login successful:", email)
+
             return jsonify({
                 "message": "Login successful",
                 "name": user["name"]
             })
-        else:
-            return jsonify({"message": "Invalid email or password"}), 401
+
+        return jsonify({"message": "Invalid email or password"}), 401
 
     except Exception as e:
         print("❌ Login Error:", e)
         return jsonify({"message": "Server error during login"}), 500
+
 
 @app.route("/users", methods=["GET"])
 def get_users():
@@ -121,35 +125,38 @@ def get_users():
         return jsonify(users)
 
     except Exception as e:
-        print("Error:", e)
+        print("❌ Fetch Users Error:", e)
         return jsonify({"message": "Error fetching users"}), 500
-    
+
+
 # ==============================
 # 🖼️ IMAGE PREDICTION
 # ==============================
 
 @app.route("/predict_image", methods=["POST"])
 def predict_image_api():
-    if "image" not in request.files:
-        return jsonify({"error": "No image file provided"}), 400
-
-    file = request.files["image"]
-
-    if file.filename == "":
-        return jsonify({"error": "Empty filename"}), 400
-
     try:
-        file_path = os.path.join(app.config["UPLOAD_FOLDER"], file.filename)
+
+        if "image" not in request.files:
+            return jsonify({"error": "No image file provided"}), 400
+
+        file = request.files["image"]
+
+        if file.filename == "":
+            return jsonify({"error": "Empty filename"}), 400
+
+        ext = file.filename.rsplit(".", 1)[-1].lower()
+        filename = f"{uuid.uuid4()}.{ext}"
+
+        file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
         file.save(file_path)
 
-        print("📷 Image received:", file.filename)
+        print("📷 Image Received:", filename)
 
         result = predict_image(file_path)
 
-        os.remove(file_path)
-
-        if not isinstance(result, dict):
-            return jsonify({"error": "Invalid prediction result"}), 500
+        if os.path.exists(file_path):
+            os.remove(file_path)
 
         print("✅ Image Prediction:", result)
 
@@ -167,106 +174,94 @@ def predict_image_api():
 @app.route("/predict_voice", methods=["POST"])
 def predict_voice_route():
     try:
-        print("\n🔥 Voice API Called 🔥")
 
         data = request.get_json()
 
         if not data:
             return jsonify({"error": "No JSON data received"}), 400
 
-        # ✅ Feature order MUST match training order exactly
         feature_order = [
-            "mdvpFo",        # MDVP:Fo(Hz)
-            "mdvpJitter",    # MDVP:Jitter(%)
-            "mdvpShimmer",   # MDVP:Shimmer
-            "hnr",           # HNR
-            "rpde",          # RPDE
-            "dfa",           # DFA
-            "spread1",       # spread1
-            "spread2",       # spread2
-            "ppe"            # PPE
+            "mdvpFo",
+            "mdvpJitter",
+            "mdvpShimmer",
+            "hnr",
+            "rpde",
+            "dfa",
+            "spread1",
+            "spread2",
+            "ppe"
         ]
 
         features = []
 
         for field in feature_order:
+
             if field not in data:
                 return jsonify({"error": f"Missing field: {field}"}), 400
 
-            try:
-                value = float(data[field])
-                features.append(value)
-            except (ValueError, TypeError):
-                return jsonify({"error": f"Invalid numeric value for {field}"}), 400
+            value = float(data[field])
+            features.append(value)
 
-        #print("📊 Final Ordered Features:", features)
-
-        # Call model prediction
         result = predict_voice(features)
 
-        if "error" in result:
-            return jsonify(result), 400
+        print("🎤 Voice Prediction:", result)
 
-        print("✅ Prediction Result:", result)
-
-        return jsonify(result), 200
+        return jsonify(result)
 
     except Exception as e:
         print("❌ Voice Prediction Error:", e)
         return jsonify({"error": "Voice prediction failed"}), 500
-    
+
+
 # ==============================
-# SPIRAL HANDWRITING PREDICTION
+# ✍️ SPIRAL HANDWRITING PREDICTION
 # ==============================
 
 @app.route("/predict_spiral", methods=["POST"])
 def predict_spiral_route():
     try:
-        # Check if image is present
+
         if "image" not in request.files:
             return jsonify({"error": "No image uploaded"}), 400
 
         file = request.files["image"]
 
-        # Check filename
         if file.filename == "":
             return jsonify({"error": "Empty filename"}), 400
 
-        # Allow only image files
         allowed_extensions = {"png", "jpg", "jpeg"}
 
-        file_ext = file.filename.rsplit(".", 1)[-1].lower()
+        ext = file.filename.rsplit(".", 1)[-1].lower()
 
-        if file_ext not in allowed_extensions:
-            return jsonify({"error": "Invalid file type. Upload PNG/JPG/JPEG"}), 400
+        if ext not in allowed_extensions:
+            return jsonify({"error": "Invalid file type"}), 400
 
-        # Save file
-        file_path = os.path.join(app.config["UPLOAD_FOLDER"], file.filename)
+        filename = f"{uuid.uuid4()}.{ext}"
+
+        file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+
         file.save(file_path)
 
-        print("✍️ Spiral Image Received:", file.filename)
+        print("✍️ Spiral Image Received:", filename)
 
-        # Run prediction
         result = predict_spiral(file_path)
 
-        # Delete file after prediction
+        print("🧠 Spiral Prediction:", result)
+
         if os.path.exists(file_path):
             os.remove(file_path)
 
-        # Validate result
-        if not isinstance(result, dict):
-            return jsonify({"error": "Invalid prediction result"}), 500
-
-        print("✅ Spiral Prediction:", result)
-
-        return jsonify(result), 200
+        return jsonify(result)
 
     except Exception as e:
         print("❌ Spiral Prediction Error:", e)
         return jsonify({"error": "Failed to process spiral image"}), 500
+
+
 # ==============================
 # RUN SERVER
 # ==============================
+
 if __name__ == "__main__":
     print("🚀 Starting PD Backend Server...")
-    app.run(host="0.0.0.0", port=5000, debug=False)
+    app.run(host="0.0.0.0", port=5000, debug=True)
