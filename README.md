@@ -166,13 +166,13 @@ This module allows users to upload brain MRI images for AI-based analysis using 
 ✍️ Spiral Drawing Pattern Prediction:
 This module allows users to upload spiral drawing patterns for AI-based analysis of motor control irregularities associated with Parkinson’s disease. The system evaluates the drawing and provides a prediction result with confidence score and AI explanation summary.
 
-<img width="1810" height="825" alt="Screenshot 2026-03-08 182450" src="https://github.com/user-attachments/assets/a308f540-9241-46bc-8618-fef63a75ff28" />
+<img width="1894" height="904" alt="Screenshot 2026-03-08 171413" src="https://github.com/user-attachments/assets/90130a1f-5f8a-4506-89ff-26e9f616fb64" />
 
 
 
 
-🎯 About Our Mission
-
+🎯 About Our Mission: 
 This section highlights the mission of the Parkinson’s Disease Prediction System, which is to use Artificial Intelligence to support early detection and improve patient outcomes. The platform aims to provide an AI-driven, medically inspired, and human-centered approach for accessible and reliable disease screening.
 
-![Uploading Screenshot 2026-03-08 185108.png…]()
+<img width="1858" height="742" alt="Screenshot 2026-03-08 185108" src="https://github.com/user-attachments/assets/e8510dbe-d27e-4d5a-833a-fdc3fa06b0da" />
+
