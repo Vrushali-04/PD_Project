@@ -11,10 +11,10 @@ const TeamSection = () => {
       color: "from-primary to-secondary",
     },
     {
-      name: "Jay Pyati",
+      name: "Sakshi Rokade",
       role: "Frontend Developer",
       description: "Expert in creating beautiful and responsive user interfaces",
-      initials: "JP",
+      initials: "SR",
       color: "from-secondary to-accent",
     },
     {
