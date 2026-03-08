@@ -12,37 +12,20 @@ import tensorflow as tf
 # =====================================================
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Model is inside the same models folder
 MODEL_PATH = os.path.join(BASE_DIR, "spiral_parkinson_model.h5")
 
 if not os.path.exists(MODEL_PATH):
     raise FileNotFoundError(f"❌ Model not found at {MODEL_PATH}")
 
+# Load trained model
 model = tf.keras.models.load_model(MODEL_PATH)
 
 print("✅ Spiral Model Loaded Successfully")
 
 IMG_SIZE = 224
 THRESHOLD = 0.5
-
-
-# =====================================================
-# CHECK IF IMAGE LOOKS LIKE SPIRAL DRAWING
-# =====================================================
-
-def is_valid_spiral(img):
-
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-    # detect edges
-    edges = cv2.Canny(gray, 50, 150)
-
-    edge_pixels = np.sum(edges > 0)
-
-    # If very few edges → probably not a drawing
-    if edge_pixels < 500:
-        return False
-
-    return True
 
 
 # =====================================================
@@ -61,13 +44,16 @@ def preprocess(image_path):
 
     print("📷 Original Image Shape:", img.shape)
 
-    # Validate spiral-like image
-    if not is_valid_spiral(img):
-        raise ValueError("❌ Invalid image: not a spiral drawing")
-
+    # Resize image
     img = cv2.resize(img, (IMG_SIZE, IMG_SIZE))
+
+    # Convert BGR → RGB
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    # Normalize
     img = img.astype("float32") / 255.0
+
+    # Add batch dimension
     img = np.expand_dims(img, axis=0)
 
     return img
@@ -87,6 +73,7 @@ def predict_spiral(image_path):
 
         print("🧠 Raw Model Output:", prediction)
 
+        # Correct classification logic
         if prediction >= THRESHOLD:
             result = "parkinson"
             confidence = prediction * 100
@@ -94,17 +81,22 @@ def predict_spiral(image_path):
             result = "healthy"
             confidence = (1 - prediction) * 100
 
-        return {
+        response = {
             "prediction": result,
             "confidence": round(float(confidence), 2)
         }
+
+        print("✅ Prediction:", response)
+
+        return response
 
     except Exception as e:
 
         print("❌ Prediction Error:", str(e))
 
         return {
-            "error": "Invalid image uploaded"
+            "error": "Prediction failed",
+            "details": str(e)
         }
 
 
@@ -114,6 +106,7 @@ def predict_spiral(image_path):
 
 if __name__ == "__main__":
 
+    # Change to any spiral image for testing
     test_image = "test_image.png"
 
     result = predict_spiral(test_image)
