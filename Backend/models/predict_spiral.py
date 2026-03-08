@@ -13,15 +13,10 @@ import tensorflow as tf
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-MODEL_PATH = os.path.join(
-    BASE_DIR,
-    "..",
-    "saved_models",
-    "best_spiral_model.keras"
-)
+MODEL_PATH = os.path.join(BASE_DIR, "best_spiral_model.keras")
 
 if not os.path.exists(MODEL_PATH):
-    raise FileNotFoundError("Model not found!")
+    raise FileNotFoundError(f"Model not found at {MODEL_PATH}")
 
 model = tf.keras.models.load_model(MODEL_PATH)
 
