@@ -13,11 +13,17 @@ import tensorflow as tf
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-MODEL_PATH = os.path.join(BASE_DIR, "best_spiral_model.keras")
+MODEL_PATH = os.path.join(
+    BASE_DIR,
+    "..",
+    "saved_models",
+    "best_spiral_model.keras"
+)
 
 if not os.path.exists(MODEL_PATH):
-    raise FileNotFoundError(f"Model not found at {MODEL_PATH}")
+    raise FileNotFoundError(f"❌ Model not found at {MODEL_PATH}")
 
+# Load trained model
 model = tf.keras.models.load_model(MODEL_PATH)
 
 print("✅ Spiral Model Loaded Successfully")
@@ -32,6 +38,9 @@ THRESHOLD = 0.5
 
 def preprocess(image_path):
 
+    if not os.path.exists(image_path):
+        raise ValueError("Image path does not exist")
+
     img = cv2.imread(image_path)
 
     if img is None:
@@ -39,10 +48,16 @@ def preprocess(image_path):
 
     print("📷 Original Image Shape:", img.shape)
 
+    # Resize image
     img = cv2.resize(img, (IMG_SIZE, IMG_SIZE))
+
+    # Convert BGR → RGB
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
+    # Normalize
     img = img.astype("float32") / 255.0
+
+    # Expand dimensions
     img = np.expand_dims(img, axis=0)
 
     return img
@@ -54,9 +69,6 @@ def preprocess(image_path):
 
 def predict_spiral(image_path):
 
-    if not os.path.exists(image_path):
-        return {"error": "Image not found"}
-
     try:
 
         img = preprocess(image_path)
@@ -65,6 +77,7 @@ def predict_spiral(image_path):
 
         print("🧠 Raw Model Output:", prediction)
 
+        # Classification logic
         if prediction >= THRESHOLD:
             result = "healthy"
             confidence = prediction * 100
@@ -72,11 +85,33 @@ def predict_spiral(image_path):
             result = "parkinson"
             confidence = (1 - prediction) * 100
 
-        return {
+        response = {
             "prediction": result,
             "confidence": round(float(confidence), 2)
         }
 
+        print("✅ Prediction:", response)
+
+        return response
+
     except Exception as e:
-        print("❌ Prediction Error:", e)
-        return {"error": "Prediction failed"}
+
+        print("❌ Prediction Error:", str(e))
+
+        return {
+            "error": "Prediction failed",
+            "details": str(e)
+        }
+
+
+# =====================================================
+# TEST SCRIPT (optional)
+# =====================================================
+
+if __name__ == "__main__":
+
+    test_image = "test_image.png"   # change to your image path
+
+    result = predict_spiral(test_image)
+
+    print(result)
