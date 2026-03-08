@@ -19,7 +19,9 @@ This project proposes a multi-modal prediction system that integrates:
 Using deep learning based feature fusion, the system combines these heterogeneous data sources to generate more reliable predictions compared to single-modality systems.
 
 ⚙️ Core Technical Architecture
+
 🔹 Multi-Modal Data Processing
+
 🎤 1. Voice Data Analysis
 
 Acoustic feature extraction using MFCC
@@ -139,39 +141,13 @@ Returning prediction results
 
 🛠️ Technology Stack
 
-🎨 Frontend
+Frontend : ⚛️ React.js 🟦 TypeScript 🎨 CSS ⚡ Vite 🌬️ Tailwind CSS
 
-⚛️ React.js 🟦 TypeScript 🎨 CSS ⚡ Vite 🌬️ Tailwind CSS
+Backend : 🐍 Python 🌐 Flask 🔗 REST APIs
 
-⚙️ Backend
+Machine Learning / AI : 🔥 TensorFlow 🧠 Keras 📊 Scikit-learn 📷 OpenCV 🔢 NumPy 🐼 Pandas
 
-🐍 Python
-
-🌐 Flask
-
-🔗 REST APIs
-
-🧠 Machine Learning / AI
-
-🔥 TensorFlow
-
-🧠 Keras
-
-📊 Scikit-learn
-
-📷 OpenCV
-
-🔢 NumPy
-
-🐼 Pandas
-
-🤖 Deep Learning Models
-
-📡 MobileNetV2 (Transfer Learning CNN)
-
-📈 Support Vector Machine (SVM)
-
-🔗 CNN-LSTM Hybrid Model
+Deep Learning Models : 📡 MobileNetV2 (Transfer Learning CNN) 📈 Support Vector Machine (SVM) 🔗 CNN-LSTM Hybrid Model
 
 📂 Project Structure
 
