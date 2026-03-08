@@ -56,53 +56,31 @@ The system integrates multiple models specialized for different types of data.
 
 Models Used
 
-Support Vector Machine (SVM)
+1. Support Vector Machine (SVM): Used for structured voice feature classification
 
-Used for structured voice feature classification
+2. Convolutional Neural Network (CNN): Used for spatial feature extraction from brain MRI images
 
-Convolutional Neural Network (CNN)
-
-Used for spatial feature extraction from brain MRI images
-
-CNN-LSTM Hybrid Model
-
-Used for analyzing sequential drawing patterns
-
-Model Fusion
-
-Predictions from all modalities are combined using model fusion techniques to improve diagnostic reliability and reduce false predictions.
+3. CNN-LSTM Hybrid Model: Used for analyzing sequential drawing patterns
 
 🧪 Model Training & Evaluation
 
 The models are implemented using Python-based AI frameworks.
 
-Libraries Used
-
-TensorFlow
-
-Keras
-
-Scikit-learn
-
-OpenCV
-
-NumPy
-
-Pandas
+Libraries Used: TensorFlow, Keras, Scikit-learn, OpenCV, NumPy, Pandas
 
 Evaluation Metrics
 
 The models are evaluated using the following metrics:
 
-Accuracy
+1. Accuracy
+  
+2. Precision
 
-Precision
+3. Recall
 
-Recall
+4. F1-Score
 
-F1-Score
-
-Cross-Validation
+5. Cross-Validation
 
 These metrics ensure that the models are robust, reliable, and generalize well to unseen data.
 
