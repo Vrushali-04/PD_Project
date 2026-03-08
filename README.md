@@ -136,3 +136,52 @@ Loading trained ML models
 Performing model inference
 
 Returning prediction results
+
+🛠️ Technology Stack
+
+🎨 Frontend
+
+⚛️ React.js
+
+🟦 TypeScript
+
+🎨 CSS
+
+⚡ Vite
+
+🌬️ Tailwind CSS
+
+⚙️ Backend
+
+🐍 Python
+
+🌐 Flask
+
+🔗 REST APIs
+
+🧠 Machine Learning / AI
+
+🔥 TensorFlow
+
+🧠 Keras
+
+📊 Scikit-learn
+
+📷 OpenCV
+
+🔢 NumPy
+
+🐼 Pandas
+
+🤖 Deep Learning Models
+
+📡 MobileNetV2 (Transfer Learning CNN)
+
+📈 Support Vector Machine (SVM)
+
+🔗 CNN-LSTM Hybrid Model
+
+📂 Project Structure
+
+<img width="585" height="659" alt="Screenshot 2026-03-08 175850" src="https://github.com/user-attachments/assets/3893a193-170d-4561-a51b-cb9efe8f714d" />
+
