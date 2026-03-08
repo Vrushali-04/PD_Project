@@ -13,12 +13,8 @@ import tensorflow as tf
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-MODEL_PATH = os.path.join(
-    BASE_DIR,
-    "..",
-    "saved_models",
-    "best_spiral_model.keras"
-)
+# Model is inside the same models folder
+MODEL_PATH = os.path.join(BASE_DIR, "spiral_parkinson_model.h5")
 
 if not os.path.exists(MODEL_PATH):
     raise FileNotFoundError(f"❌ Model not found at {MODEL_PATH}")
@@ -39,12 +35,12 @@ THRESHOLD = 0.5
 def preprocess(image_path):
 
     if not os.path.exists(image_path):
-        raise ValueError("Image path does not exist")
+        raise ValueError("❌ Image path does not exist")
 
     img = cv2.imread(image_path)
 
     if img is None:
-        raise ValueError("Invalid image file")
+        raise ValueError("❌ Invalid image file")
 
     print("📷 Original Image Shape:", img.shape)
 
@@ -57,7 +53,7 @@ def preprocess(image_path):
     # Normalize
     img = img.astype("float32") / 255.0
 
-    # Expand dimensions
+    # Add batch dimension
     img = np.expand_dims(img, axis=0)
 
     return img
@@ -77,12 +73,12 @@ def predict_spiral(image_path):
 
         print("🧠 Raw Model Output:", prediction)
 
-        # Classification logic
+        # Correct classification logic
         if prediction >= THRESHOLD:
-            result = "healthy"
+            result = "parkinson"
             confidence = prediction * 100
         else:
-            result = "parkinson"
+            result = "healthy"
             confidence = (1 - prediction) * 100
 
         response = {
@@ -105,12 +101,13 @@ def predict_spiral(image_path):
 
 
 # =====================================================
-# TEST SCRIPT (optional)
+# TEST SCRIPT
 # =====================================================
 
 if __name__ == "__main__":
 
-    test_image = "test_image.png"   # change to your image path
+    # Change to any spiral image for testing
+    test_image = "test_image.png"
 
     result = predict_spiral(test_image)
 
