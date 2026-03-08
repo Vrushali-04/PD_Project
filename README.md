@@ -141,15 +141,7 @@ Returning prediction results
 
 🎨 Frontend
 
-⚛️ React.js
-
-🟦 TypeScript
-
-🎨 CSS
-
-⚡ Vite
-
-🌬️ Tailwind CSS
+⚛️ React.js 🟦 TypeScript 🎨 CSS ⚡ Vite 🌬️ Tailwind CSS
 
 ⚙️ Backend
 
