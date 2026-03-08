@@ -1,71 +1,138 @@
 🧠 Parkinson’s Disease Prediction System
+
+A multi-modal AI-based medical diagnostic platform designed to improve early detection of Parkinson’s Disease by analyzing multiple biological signals including voice recordings, brain MRI images, and hand-drawn spiral patterns.
+
+The system combines machine learning and deep learning models to extract features from different data sources and produce accurate diagnostic predictions through an intuitive web application interface.
+
 📌 Project Overview
 
-The Parkinson’s Disease Prediction System is a multi-modal medical diagnostic platform designed to improve early detection accuracy by analyzing voice signals, brain imaging data, and hand-drawn patterns. The system uses deep learning–based feature fusion to combine heterogeneous data sources and generate robust predictions.
+Parkinson’s Disease is a progressive neurological disorder that affects movement, speech, and coordination. Early diagnosis is challenging because symptoms develop gradually.
+
+This project proposes a multi-modal prediction system that integrates:
+
+🎤 Voice Signal Analysis
+
+🧠 Brain Image Analysis
+
+✍️ Hand-Drawn Pattern Analysis
+
+Using deep learning based feature fusion, the system combines these heterogeneous data sources to generate more reliable predictions compared to single-modality systems.
 
 ⚙️ Core Technical Architecture
 🔹 Multi-Modal Data Processing
+🎤 1. Voice Data Analysis
 
-1.Voice Data Analysis
-Acoustic feature extraction (MFCC, jitter, shimmer)
+Acoustic feature extraction using MFCC
+
+Extraction of jitter and shimmer features
+
 Signal preprocessing and normalization
-Classification using Support Vector Machines (SVM)
 
-2.Brain Image Analysis
+Classification using Support Vector Machine (SVM)
+
+🧠 2. Brain Image Analysis
+
 Image preprocessing using OpenCV
-Feature learning via Convolutional Neural Networks (CNN)
-Spatial pattern recognition for neurological anomalies
 
-3.Hand-Drawn Pattern Analysis
-Spiral and drawing image enhancement
-Temporal feature extraction
+Feature extraction with Convolutional Neural Networks (CNN)
+
+Spatial pattern recognition for detecting neurological anomalies
+
+✍️ 3. Hand-Drawn Pattern Analysis
+
+Spiral and handwriting pattern enhancement
+
+Feature extraction from drawing images
+
 Sequential modeling using CNN-LSTM architecture
+
+Detection of tremor-based patterns in drawings
 
 🧠 Machine Learning & Deep Learning Models
 
-SVM for structured voice feature classification
-CNN for spatial feature extraction from brain images
-CNN-LSTM for combined spatial-temporal analysis of drawing inputs
-Model fusion to aggregate predictions from all modalities
+The system integrates multiple models specialized for different types of data.
 
-Training, validation, and testing using optimized hyperparameters
+Models Used
+
+Support Vector Machine (SVM)
+
+Used for structured voice feature classification
+
+Convolutional Neural Network (CNN)
+
+Used for spatial feature extraction from brain MRI images
+
+CNN-LSTM Hybrid Model
+
+Used for analyzing sequential drawing patterns
+
+Model Fusion
+
+Predictions from all modalities are combined using model fusion techniques to improve diagnostic reliability and reduce false predictions.
 
 🧪 Model Training & Evaluation
 
-Implemented in Python
-Frameworks: TensorFlow / Keras
+The models are implemented using Python-based AI frameworks.
 
-Evaluation metrics:
+Libraries Used
+
+TensorFlow
+
+Keras
+
+Scikit-learn
+
+OpenCV
+
+NumPy
+
+Pandas
+
+Evaluation Metrics
+
+The models are evaluated using the following metrics:
+
 Accuracy
-Precision
-Recall
-F1-Score
-Cross-validation for improved generalization
 
-🌐 Web Application Layer
+Precision
+
+Recall
+
+F1-Score
+
+Cross-Validation
+
+These metrics ensure that the models are robust, reliable, and generalize well to unseen data.
+
+🌐 Web Application Architecture
 🔹 Frontend (Client Side)
-Built using React.js
-Real-time data visualization and prediction results
-Responsive UI with component-based architecture
-User input handling for audio, image, and drawing uploads
+
+Built using React.js with modern UI tools.
+
+Features
+
+Upload voice recordings
+
+Upload brain MRI images
+
+Upload spiral drawings
+
+Display prediction results instantly
+
+Responsive and interactive UI
 
 🔹 Backend (Server Side)
-Developed using Flask
-RESTful APIs for:
-Data preprocessing
-Model inference
-Result delivery
-Efficient request handling and model integration
 
-🛠️ Technology Stack
-🔹 Frontend
-React.js
-🔹 Backend
-Flask (Python)
-REST APIs
-🔹 Machine Learning / AI
-Python
-TensorFlow
-Keras
-Scikit-learn
-OpenCV
+Developed using Flask (Python).
+
+Backend Responsibilities
+
+Handling API requests
+
+Data preprocessing
+
+Loading trained ML models
+
+Performing model inference
+
+Returning prediction results
