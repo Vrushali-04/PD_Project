@@ -136,10 +136,12 @@ Results And Scrinshots
 <img width="1911" height="913" alt="Screenshot 2026-03-08 181544" src="https://github.com/user-attachments/assets/7b37c052-16b2-492d-811a-20a421bbb7f9" />
 
 
+
 🏠 Landing Page : 
 The landing page introduces the Parkinson’s Disease Prediction System, highlighting the role of AI and biomedical analysis in early disease detection. Users can start the prediction process by clicking the “Get Started / Try Prediction” button.
 
 <img width="1899" height="909" alt="Screenshot 2026-03-08 181940" src="https://github.com/user-attachments/assets/97cd548a-6fe6-4899-880a-9b0d9f7c4978" />
+
 
 
 🎤 Voice-Based Parkinson’s Prediction :
@@ -148,10 +150,12 @@ This interface allows users to enter biomedical voice measurement parameters to 
 <img width="1896" height="857" alt="Screenshot 2026-03-08 182309" src="https://github.com/user-attachments/assets/f792368f-088f-49c3-9d84-805b06443f11" />
 
 
+
 🧠 Brain MRI Image Prediction:
 This module allows users to upload brain MRI images for AI-based analysis using a deep learning model. The system processes the image and provides a prediction result indicating the probability of Parkinson’s disease along with confidence and an AI explanation summary.
 
 <img width="1810" height="825" alt="Screenshot 2026-03-08 182450" src="https://github.com/user-attachments/assets/a662f8d6-cab5-438f-b400-e4001cd11e3d" />
+
 
 
 ✍️ Spiral Drawing Pattern Prediction:
