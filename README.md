@@ -50,6 +50,37 @@ Sequential modeling using CNN-LSTM architecture
 
 Detection of tremor-based patterns in drawings
 
+
+🌐 Web Application Architecture
+
+🔹 Frontend (Client Side): Built using React.js with modern UI tools.
+
+Features : 
+
+Upload voice recordings
+
+Upload brain MRI images
+
+Upload spiral drawings
+
+Display prediction results instantly
+
+Responsive and interactive UI
+
+🔹 Backend (Server Side): Developed using Flask (Python).
+
+Backend Responsibilities : 
+
+Handling API requests
+
+Data preprocessing
+
+Loading trained ML models
+
+Performing model inference
+
+Returning prediction results
+
 🧠 Machine Learning & Deep Learning Models
 
 The system integrates multiple models specialized for different types of data.
@@ -84,36 +115,6 @@ The models are evaluated using the following metrics:
 
 These metrics ensure that the models are robust, reliable, and generalize well to unseen data.
 
-🌐 Web Application Architecture
-
-🔹 Frontend (Client Side): Built using React.js with modern UI tools.
-
-Features : 
-
-Upload voice recordings
-
-Upload brain MRI images
-
-Upload spiral drawings
-
-Display prediction results instantly
-
-Responsive and interactive UI
-
-🔹 Backend (Server Side): Developed using Flask (Python).
-
-Backend Responsibilities : 
-
-Handling API requests
-
-Data preprocessing
-
-Loading trained ML models
-
-Performing model inference
-
-Returning prediction results
-
 🛠️ Technology Stack
 
 Frontend : ⚛️ React.js 🟦 TypeScript 🎨 CSS ⚡ Vite 🌬️ Tailwind CSS
@@ -125,6 +126,5 @@ Machine Learning / AI : 🔥 TensorFlow 🧠 Keras 📊 Scikit-learn 📷 OpenCV
 Deep Learning Models : 📡 MobileNetV2 (Transfer Learning CNN) 📈 Support Vector Machine (SVM) 🔗 CNN-LSTM Hybrid Model
 
 📂 Project Structure
-
 <img width="585" height="659" alt="Screenshot 2026-03-08 175850" src="https://github.com/user-attachments/assets/3893a193-170d-4561-a51b-cb9efe8f714d" />
 
