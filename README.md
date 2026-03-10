@@ -1,119 +1,82 @@
 🧠 Parkinson’s Disease Prediction System
 
-A multi-modal AI-based medical diagnostic platform designed to improve early detection of Parkinson’s Disease by analyzing multiple biological signals including voice recordings, brain MRI images, and hand-drawn spiral patterns.
+An AI-powered multi-modal diagnostic platform designed to assist in the early detection of Parkinson’s Disease using biomedical data such as voice signals, brain MRI images, and hand-drawn spiral patterns.
 
-The system combines machine learning and deep learning models to extract features from different data sources and produce accurate diagnostic predictions through an intuitive web application interface.
+--------------------------------------------------------------------------------------------------------------------------------
 
-📌 Project Overview
+📌 Overview
 
-Parkinson’s Disease is a progressive neurological disorder that affects movement, speech, and coordination. Early diagnosis is challenging because symptoms develop gradually.
+Parkinson’s Disease is a progressive neurological disorder that affects movement, speech, and coordination. Early diagnosis is challenging because symptoms appear gradually.
 
-This project proposes a multi-modal prediction system that integrates:
+This system improves detection using multi-modal AI analysis of:
 
-🎤 Voice Signal Analysis
+🎤 Voice Signals
 
-🧠 Brain Image Analysis
+🧠 Brain MRI Images
 
-✍️ Hand-Drawn Pattern Analysis
+✍️ Spiral Drawing Patterns
 
-Using deep learning based feature fusion, the system combines these heterogeneous data sources to generate more reliable predictions compared to single-modality systems.
+By combining multiple data sources, the model generates more reliable predictions than single-input systems.
 
-⚙️ Core Technical Architecture
+⚙️ Core Architecture
 
-🔹 Multi-Modal Data Processing
+🎤 Voice Analysis
 
-🎤 1. Voice Data Analysis
+MFCC feature extraction
 
-Acoustic feature extraction using MFCC
+Jitter & shimmer analysis
 
-Extraction of jitter and shimmer features
+Signal preprocessing
 
-Signal preprocessing and normalization
+SVM classification
 
-Classification using Support Vector Machine (SVM)
+🧠 Brain MRI Analysis
 
-🧠 2. Brain Image Analysis
+Image preprocessing (OpenCV)
 
-Image preprocessing using OpenCV
+Feature extraction using CNN
 
-Feature extraction with Convolutional Neural Networks (CNN)
+Neurological pattern detection
 
-Spatial pattern recognition for detecting neurological anomalies
+✍️ Spiral Pattern Analysis
 
-✍️ 3. Hand-Drawn Pattern Analysis
+Drawing preprocessing
 
-Spiral and handwriting pattern enhancement
+Image feature extraction
 
-Feature extraction from drawing images
+CNN–LSTM tremor pattern detection
 
-Sequential modeling using CNN-LSTM architecture
+--------------------------------------------------------------------------------------------------------------------------------
 
-Detection of tremor-based patterns in drawings
+🌐 Web Application
 
+🎨 Frontend: Built using React.js
 
-🌐 Web Application Architecture
+Features: Voice upload • MRI image upload • Spiral drawing upload • Instant prediction results • Responsive UI
 
-🔹 Frontend (Client Side): Built using React.js with modern UI tools.
+⚙️ Backend: Built using Flask (Python)
 
-Features : 
+Responsibilities: API handling • Data preprocessing • ML model loading • Prediction generation
 
-Upload voice recordings
+--------------------------------------------------------------------------------------------------------------------------------
 
-Upload brain MRI images
+🧠 AI Models
 
-Upload spiral drawings
+| Prediction Input Type | Machine Learning / Deep Learning Model  |
+|-----------------------|-----------------------------------------|
+| Voice Data            | Support Vector Machine (SVM)            |
+| Brain MRI Images      | Convolutional Neural Network (CNN)      |
+| Spiral Drawings       | CNN–LSTM Hybrid Model                   |
 
-Display prediction results instantly
-
-Responsive and interactive UI
-
-🔹 Backend (Server Side): Developed using Flask (Python).
-
-Backend Responsibilities : 
-
-Handling API requests
-
-Data preprocessing
-
-Loading trained ML models
-
-Performing model inference
-
-Returning prediction results
-
-🧠 Machine Learning & Deep Learning Models
-
-The system integrates multiple models specialized for different types of data.
-
-Models Used
-
-1. Support Vector Machine (SVM): Used for structured voice feature classification
-
-2. Convolutional Neural Network (CNN): Used for spatial feature extraction from brain MRI images
-
-3. CNN-LSTM Hybrid Model: Used for analyzing sequential drawing patterns
+--------------------------------------------------------------------------------------------------------------------------------
 
 🧪 Model Training & Evaluation
 
-The models are implemented using Python-based AI frameworks.
+Libraries: TensorFlow • Keras • Scikit-learn • OpenCV • NumPy • Pandas
 
-Libraries Used: TensorFlow, Keras, Scikit-learn, OpenCV, NumPy, Pandas
+Evaluation Metrics: Accuracy, Precision, Recall, F1 Score, Cross-Validation.
 
-Evaluation Metrics
-
-The models are evaluated using the following metrics:
-
-1. Accuracy
-  
-2. Precision
-
-3. Recall
-
-4. F1-Score
-
-5. Cross-Validation
-
-These metrics ensure that the models are robust, reliable, and generalize well to unseen data.
+--------------------------------------------------------------------------------------------------------------------------------
 
 🛠️ Technology Stack
 
@@ -125,54 +88,53 @@ Machine Learning / AI : 🔥 TensorFlow 🧠 Keras 📊 Scikit-learn 📷 OpenCV
 
 Deep Learning Models : 📡 MobileNetV2 (Transfer Learning CNN) 📈 Support Vector Machine (SVM) 🔗 CNN-LSTM Hybrid Model
 
+--------------------------------------------------------------------------------------------------------------------------------
+
 📂 Project Structure
 
 <img width="585" height="659" alt="Screenshot 2026-03-08 175850" src="https://github.com/user-attachments/assets/3893a193-170d-4561-a51b-cb9efe8f714d" />
 
+--------------------------------------------------------------------------------------------------------------------------------
+
 📊 Results & Screenshots: 
 
 
-🔐 User Authentication Interface : This interface allows users to create an account or sign in to securely access the Parkinson’s disease prediction system.
+🔐 User Authentication Interface : Users can sign up or log in to securely access the Parkinson’s disease prediction system.
 
 <img width="1911" height="913" alt="Screenshot 2026-03-08 181544" src="https://github.com/user-attachments/assets/7b37c052-16b2-492d-811a-20a421bbb7f9" />
 
 
 
-
-🏠 Landing Page : 
-The landing page introduces the Parkinson’s Disease Prediction System, highlighting the role of AI and biomedical analysis in early disease detection. Users can start the prediction process by clicking the “Get Started / Try Prediction” button.
+--------------------------------------------------------------------------------------------------------------------------------
+🏠 Landing Page : The landing page introduces the system and allows users to start the AI-based prediction process.
 
 <img width="1899" height="909" alt="Screenshot 2026-03-08 181940" src="https://github.com/user-attachments/assets/97cd548a-6fe6-4899-880a-9b0d9f7c4978" />
 
 
 
-
-🎤 Voice-Based Parkinson’s Prediction :
-This interface allows users to enter biomedical voice measurement parameters to analyze vocal patterns associated with Parkinson’s disease. The system processes the input features and generates an AI-based prediction result with confidence level and explanation summary.
+--------------------------------------------------------------------------------------------------------------------------------
+🎤 Voice-Based Parkinson’s Prediction : Users enter voice measurement parameters to analyze vocal patterns and generate an AI prediction result.
 
 <img width="1896" height="857" alt="Screenshot 2026-03-08 182309" src="https://github.com/user-attachments/assets/f792368f-088f-49c3-9d84-805b06443f11" />
 
 
 
-
-🧠 Brain MRI Image Prediction:
-This module allows users to upload brain MRI images for AI-based analysis using a deep learning model. The system processes the image and provides a prediction result indicating the probability of Parkinson’s disease along with confidence and an AI explanation summary.
+--------------------------------------------------------------------------------------------------------------------------------
+🧠 Brain MRI Image Prediction: Users upload brain MRI images, which are analyzed by the AI model to detect possible Parkinson’s indicators.
 
 <img width="1810" height="825" alt="Screenshot 2026-03-08 182450" src="https://github.com/user-attachments/assets/a662f8d6-cab5-438f-b400-e4001cd11e3d" />
 
 
 
-
-✍️ Spiral Drawing Pattern Prediction:
-This module allows users to upload spiral drawing patterns for AI-based analysis of motor control irregularities associated with Parkinson’s disease. The system evaluates the drawing and provides a prediction result with confidence score and AI explanation summary.
+--------------------------------------------------------------------------------------------------------------------------------
+✍️ Spiral Drawing Pattern Prediction: Users upload spiral drawings to analyze motor control patterns related to Parkinson’s disease. 
 
 <img width="1894" height="904" alt="Screenshot 2026-03-08 171413" src="https://github.com/user-attachments/assets/90130a1f-5f8a-4506-89ff-26e9f616fb64" />
 
 
 
-
-🎯 About Our Mission: 
-This section highlights the mission of the Parkinson’s Disease Prediction System, which is to use Artificial Intelligence to support early detection and improve patient outcomes. The platform aims to provide an AI-driven, medically inspired, and human-centered approach for accessible and reliable disease screening.
+--------------------------------------------------------------------------------------------------------------------------------
+🎯 About Our Mission: To use Artificial Intelligence for early detection of Parkinson’s disease and support accessible, reliable screening.
 
 <img width="1858" height="742" alt="Screenshot 2026-03-08 185108" src="https://github.com/user-attachments/assets/e8510dbe-d27e-4d5a-833a-fdc3fa06b0da" />
 
