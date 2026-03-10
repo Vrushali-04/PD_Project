@@ -92,6 +92,7 @@ Deep Learning Models : 📡 MobileNetV2 (Transfer Learning CNN) 📈 Support Vec
 ⚙️ Setup Instructions :
 
 1️⃣ Database Setup (MySQL)
+
 1. Install MySQL and MySQL Workbench.
 2. Create a database named **parkinson_db**.
 3. Update database credentials in `backend/db.py`.
@@ -100,16 +101,20 @@ Deep Learning Models : 📡 MobileNetV2 (Transfer Learning CNN) 📈 Support Vec
 
 cd backend
 
-Create virtual environment
+#Create virtual environment
+
 python -m venv venv
 
-Activate environment (Windows)
+#Activate environment (Windows)
+
 venv\Scripts\activate
 
-Install dependencies
+#Install dependencies
+
 pip install -r requirements.txt
 
-Run backend server
+#Run backend server
+
 python app.py
 
 --------------------------------------------------------------------------------------------------------------------------------
@@ -117,11 +122,13 @@ python app.py
 
 cd PD_Detector
 
-Install dependencies
+#Install dependencies
+
 npm install
 
-Start frontend server
-npm start
+#Start frontend server
+
+npm run dev
 
 --------------------------------------------------------------------------------------------------------------------------------
 📂 Project Structure
