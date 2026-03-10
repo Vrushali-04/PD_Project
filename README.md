@@ -89,7 +89,21 @@ Machine Learning / AI : 🔥 TensorFlow 🧠 Keras 📊 Scikit-learn 📷 OpenCV
 Deep Learning Models : 📡 MobileNetV2 (Transfer Learning CNN) 📈 Support Vector Machine (SVM) 🔗 CNN-LSTM Hybrid Model
 
 --------------------------------------------------------------------------------------------------------------------------------
+⚙️ Setup Instructions :
 
+1️⃣ Database Setup (MySQL)
+
+<img width="949" height="308" alt="Screenshot 2026-03-10 180427" src="https://github.com/user-attachments/assets/78de83ce-a8c0-47d6-b1e2-1eae39184312" />
+
+2️⃣ Backend Setup (Flask)
+
+<img width="915" height="357" alt="Screenshot 2026-03-10 180441" src="https://github.com/user-attachments/assets/e56d46c9-03c9-4101-b92f-2559e89779c9" />
+
+3️⃣ Frontend Setup (React)
+
+<img width="958" height="215" alt="Screenshot 2026-03-10 180741" src="https://github.com/user-attachments/assets/7643f487-a848-49f8-aee0-31d6b476050d" />
+
+--------------------------------------------------------------------------------------------------------------------------------
 📂 Project Structure
 
 <img width="585" height="659" alt="Screenshot 2026-03-08 175850" src="https://github.com/user-attachments/assets/3893a193-170d-4561-a51b-cb9efe8f714d" />
