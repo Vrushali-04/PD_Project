@@ -94,6 +94,8 @@ Deep Learning Models : 📡 MobileNetV2 (Transfer Learning CNN) 📈 Support Vec
 
 <img width="585" height="659" alt="Screenshot 2026-03-08 175850" src="https://github.com/user-attachments/assets/3893a193-170d-4561-a51b-cb9efe8f714d" />
 
+--------------------------------------------------------------------------------------------------------------------------------
+
 📊 Results & Screenshots: 
 
 
@@ -103,35 +105,35 @@ Deep Learning Models : 📡 MobileNetV2 (Transfer Learning CNN) 📈 Support Vec
 
 
 
-
+--------------------------------------------------------------------------------------------------------------------------------
 🏠 Landing Page : The landing page introduces the system and allows users to start the AI-based prediction process.
 
 <img width="1899" height="909" alt="Screenshot 2026-03-08 181940" src="https://github.com/user-attachments/assets/97cd548a-6fe6-4899-880a-9b0d9f7c4978" />
 
 
 
-
+--------------------------------------------------------------------------------------------------------------------------------
 🎤 Voice-Based Parkinson’s Prediction : Users enter voice measurement parameters to analyze vocal patterns and generate an AI prediction result.
 
 <img width="1896" height="857" alt="Screenshot 2026-03-08 182309" src="https://github.com/user-attachments/assets/f792368f-088f-49c3-9d84-805b06443f11" />
 
 
 
-
+--------------------------------------------------------------------------------------------------------------------------------
 🧠 Brain MRI Image Prediction: Users upload brain MRI images, which are analyzed by the AI model to detect possible Parkinson’s indicators.
 
 <img width="1810" height="825" alt="Screenshot 2026-03-08 182450" src="https://github.com/user-attachments/assets/a662f8d6-cab5-438f-b400-e4001cd11e3d" />
 
 
 
-
+--------------------------------------------------------------------------------------------------------------------------------
 ✍️ Spiral Drawing Pattern Prediction: Users upload spiral drawings to analyze motor control patterns related to Parkinson’s disease. 
 
 <img width="1894" height="904" alt="Screenshot 2026-03-08 171413" src="https://github.com/user-attachments/assets/90130a1f-5f8a-4506-89ff-26e9f616fb64" />
 
 
 
-
+--------------------------------------------------------------------------------------------------------------------------------
 🎯 About Our Mission: To use Artificial Intelligence for early detection of Parkinson’s disease and support accessible, reliable screening.
 
 <img width="1858" height="742" alt="Screenshot 2026-03-08 185108" src="https://github.com/user-attachments/assets/e8510dbe-d27e-4d5a-833a-fdc3fa06b0da" />
