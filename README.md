@@ -1,119 +1,108 @@
 🧠 Parkinson’s Disease Prediction System
 
-A multi-modal AI-based medical diagnostic platform designed to improve early detection of Parkinson’s Disease by analyzing multiple biological signals including voice recordings, brain MRI images, and hand-drawn spiral patterns.
+An AI-powered multi-modal diagnostic platform designed to assist in the early detection of Parkinson’s Disease using biomedical data such as voice signals, brain MRI images, and hand-drawn spiral patterns.
 
-The system combines machine learning and deep learning models to extract features from different data sources and produce accurate diagnostic predictions through an intuitive web application interface.
+The system integrates machine learning and deep learning models within a web-based application to analyze multiple biological signals and generate reliable prediction results.
 
-📌 Project Overview
+📌 Overview
 
-Parkinson’s Disease is a progressive neurological disorder that affects movement, speech, and coordination. Early diagnosis is challenging because symptoms develop gradually.
+Parkinson’s Disease is a progressive neurological disorder that affects movement, speech, and coordination. Since symptoms develop gradually, early diagnosis can be difficult.
 
-This project proposes a multi-modal prediction system that integrates:
+This system improves early detection by combining multiple analysis techniques:
 
 🎤 Voice Signal Analysis
 
+🧠 Brain MRI Image Analysis
+
+✍️ Spiral Drawing Pattern Analysis
+
+Using multi-modal AI models, the system produces more reliable predictions than single-data approaches.
+
+⚙️ Core Architecture
+🎤 Voice Analysis
+
+MFCC feature extraction
+
+Jitter & shimmer analysis
+
+Signal preprocessing
+
+SVM-based classification
+
 🧠 Brain Image Analysis
-
-✍️ Hand-Drawn Pattern Analysis
-
-Using deep learning based feature fusion, the system combines these heterogeneous data sources to generate more reliable predictions compared to single-modality systems.
-
-⚙️ Core Technical Architecture
-
-🔹 Multi-Modal Data Processing
-
-🎤 1. Voice Data Analysis
-
-Acoustic feature extraction using MFCC
-
-Extraction of jitter and shimmer features
-
-Signal preprocessing and normalization
-
-Classification using Support Vector Machine (SVM)
-
-🧠 2. Brain Image Analysis
 
 Image preprocessing using OpenCV
 
-Feature extraction with Convolutional Neural Networks (CNN)
+Feature extraction with CNN
 
-Spatial pattern recognition for detecting neurological anomalies
+Detection of neurological patterns
 
-✍️ 3. Hand-Drawn Pattern Analysis
+✍️ Spiral Pattern Analysis
 
-Spiral and handwriting pattern enhancement
+Drawing preprocessing
 
-Feature extraction from drawing images
+Feature extraction from images
 
-Sequential modeling using CNN-LSTM architecture
+CNN–LSTM model for tremor pattern detection
 
-Detection of tremor-based patterns in drawings
+🌐 Web Application
+🎨 Frontend
 
+Built using React.js
 
-🌐 Web Application Architecture
-
-🔹 Frontend (Client Side): Built using React.js with modern UI tools.
-
-Features : 
+Features:
 
 Upload voice recordings
 
-Upload brain MRI images
+Upload MRI brain images
 
 Upload spiral drawings
 
 Display prediction results instantly
 
-Responsive and interactive UI
+Responsive UI
 
-🔹 Backend (Server Side): Developed using Flask (Python).
+⚙️ Backend
 
-Backend Responsibilities : 
+Built using Flask (Python)
 
-Handling API requests
+Responsibilities:
+
+API request handling
 
 Data preprocessing
 
-Loading trained ML models
+ML model loading
 
-Performing model inference
+Prediction generation
 
-Returning prediction results
+🧠 AI Models
 
-🧠 Machine Learning & Deep Learning Models
+| Data Type        | Model                              |
+| ---------------- | ---------------------------------- |
+| Voice Data       | Support Vector Machine (SVM)       |
+| Brain MRI Images | Convolutional Neural Network (CNN) |
+| Spiral Drawings  | CNN-LSTM Hybrid Model              |
 
-The system integrates multiple models specialized for different types of data.
-
-Models Used
-
-1. Support Vector Machine (SVM): Used for structured voice feature classification
-
-2. Convolutional Neural Network (CNN): Used for spatial feature extraction from brain MRI images
-
-3. CNN-LSTM Hybrid Model: Used for analyzing sequential drawing patterns
 
 🧪 Model Training & Evaluation
+Libraries
 
-The models are implemented using Python-based AI frameworks.
-
-Libraries Used: TensorFlow, Keras, Scikit-learn, OpenCV, NumPy, Pandas
+TensorFlow • Keras • Scikit-learn • OpenCV • NumPy • Pandas
 
 Evaluation Metrics
 
-The models are evaluated using the following metrics:
+Accuracy
 
-1. Accuracy
-  
-2. Precision
+Precision
 
-3. Recall
+Recall
 
-4. F1-Score
+F1 Score
 
-5. Cross-Validation
+Cross-Validation
 
-These metrics ensure that the models are robust, reliable, and generalize well to unseen data.
+These metrics ensure the models are accurate, reliable, and generalize well to new data.
 
 🛠️ Technology Stack
 
