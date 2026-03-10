@@ -4,21 +4,21 @@ An AI-powered multi-modal diagnostic platform designed to assist in the early de
 
 📌 Overview
 
-Parkinson’s Disease is a progressive neurological disorder that affects movement, speech, and coordination. Since symptoms develop gradually, early diagnosis can be difficult.
+Parkinson’s Disease is a progressive neurological disorder that affects movement, speech, and coordination. Early diagnosis is challenging because symptoms appear gradually.
 
-This system improves early detection by combining multiple analysis techniques:
+This system improves detection using multi-modal AI analysis of:
 
-🎤 Voice Signal Analysis
+🎤 Voice Signals
 
-🧠 Brain MRI Image Analysis
+🧠 Brain MRI Images
 
-✍️ Spiral Drawing Pattern Analysis
+✍️ Spiral Drawing Patterns
 
-Using multi-modal AI models, the system produces more reliable predictions than single-data approaches.
+By combining multiple data sources, the model generates more reliable predictions than single-input systems.
 
 ⚙️ Core Architecture
 
-🎤 Voice Analysis:
+🎤 Voice Analysis
 
 MFCC feature extraction
 
@@ -26,23 +26,23 @@ Jitter & shimmer analysis
 
 Signal preprocessing
 
-SVM-based classification
+SVM classification
 
-🧠 Brain Image Analysis:
+🧠 Brain MRI Analysis
 
-Image preprocessing using OpenCV
+Image preprocessing (OpenCV)
 
-Feature extraction with CNN
+Feature extraction using CNN
 
-Detection of neurological patterns
+Neurological pattern detection
 
-✍️ Spiral Pattern Analysis:
+✍️ Spiral Pattern Analysis
 
 Drawing preprocessing
 
-Feature extraction from images
+Image feature extraction
 
-CNN–LSTM model for tremor pattern detection
+CNN–LSTM tremor pattern detection
 
 🌐 Web Application
 
