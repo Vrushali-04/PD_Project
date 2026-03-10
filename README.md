@@ -92,16 +92,38 @@ Deep Learning Models : 📡 MobileNetV2 (Transfer Learning CNN) 📈 Support Vec
 ⚙️ Setup Instructions :
 
 1️⃣ Database Setup (MySQL)
-
-<img width="949" height="308" alt="Screenshot 2026-03-10 180427" src="https://github.com/user-attachments/assets/78de83ce-a8c0-47d6-b1e2-1eae39184312" />
-
+1. Install MySQL and MySQL Workbench.
+2. Create a database named **parkinson_db**.
+3. Update database credentials in `backend/db.py`.
+--------------------------------------------------------------------------------------------------------------------------------
 2️⃣ Backend Setup (Flask)
 
-<img width="915" height="357" alt="Screenshot 2026-03-10 180441" src="https://github.com/user-attachments/assets/e56d46c9-03c9-4101-b92f-2559e89779c9" />
+cd backend
 
+# Create virtual environment
+python -m venv venv
+
+# Activate environment (Windows)
+venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run backend server
+python app.py
+
+--------------------------------------------------------------------------------------------------------------------------------
 3️⃣ Frontend Setup (React)
 
-<img width="958" height="215" alt="Screenshot 2026-03-10 180741" src="https://github.com/user-attachments/assets/7643f487-a848-49f8-aee0-31d6b476050d" />
+cd PD_Detector
+
+# Install dependencies
+npm install
+
+# Start frontend server
+npm start
+
+Frontend runs on: http://localhost:3000
 
 --------------------------------------------------------------------------------------------------------------------------------
 📂 Project Structure
