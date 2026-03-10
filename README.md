@@ -100,16 +100,16 @@ Deep Learning Models : 📡 MobileNetV2 (Transfer Learning CNN) 📈 Support Vec
 
 cd backend
 
-# Create virtual environment
+Create virtual environment
 python -m venv venv
 
-# Activate environment (Windows)
+Activate environment (Windows)
 venv\Scripts\activate
 
-# Install dependencies
+Install dependencies
 pip install -r requirements.txt
 
-# Run backend server
+Run backend server
 python app.py
 
 --------------------------------------------------------------------------------------------------------------------------------
@@ -117,13 +117,11 @@ python app.py
 
 cd PD_Detector
 
-# Install dependencies
+Install dependencies
 npm install
 
-# Start frontend server
+Start frontend server
 npm start
-
-Frontend runs on: http://localhost:3000
 
 --------------------------------------------------------------------------------------------------------------------------------
 📂 Project Structure
