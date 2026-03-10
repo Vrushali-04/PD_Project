@@ -45,31 +45,14 @@ Feature extraction from images
 CNN–LSTM model for tremor pattern detection
 
 🌐 Web Application
+
 🎨 Frontend: Built using React.js
 
-Features:
-
-Upload voice recordings
-
-Upload MRI brain images
-
-Upload spiral drawings
-
-Display prediction results instantly
-
-Responsive UI
+Features: Voice upload • MRI image upload • Spiral drawing upload • Instant prediction results • Responsive UI
 
 ⚙️ Backend: Built using Flask (Python)
 
-Responsibilities:
-
-API request handling
-
-Data preprocessing
-
-ML model loading
-
-Prediction generation
+Responsibilities: API handling • Data preprocessing • ML model loading • Prediction generation
 
 🧠 AI Models
 
@@ -78,6 +61,9 @@ Prediction generation
 | Voice Data       | Support Vector Machine (SVM)       |
 | Brain MRI Images | Convolutional Neural Network (CNN) |
 | Spiral Drawings  | CNN-LSTM Hybrid Model              |
+
+![Uploading Screenshot 2026-03-10 110300.png…]()
+
 
 
 
