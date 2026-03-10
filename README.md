@@ -99,36 +99,12 @@ Deep Learning Models : 📡 MobileNetV2 (Transfer Learning CNN) 📈 Support Vec
 --------------------------------------------------------------------------------------------------------------------------------
 2️⃣ Backend Setup (Flask)
 
-cd backend
-
-#Create virtual environment
-
-python -m venv venv
-
-#Activate environment (Windows)
-
-venv\Scripts\activate
-
-#Install dependencies
-
-pip install -r requirements.txt
-
-#Run backend server
-
-python app.py
+<img width="915" height="357" alt="Screenshot 2026-03-10 180441" src="https://github.com/user-attachments/assets/a4f7e716-0229-4aac-8376-7589f91e44ff" />
 
 --------------------------------------------------------------------------------------------------------------------------------
 3️⃣ Frontend Setup (React)
 
-cd PD_Detector
-
-#Install dependencies
-
-npm install
-
-#Start frontend server
-
-npm run dev
+<img width="958" height="215" alt="Screenshot 2026-03-10 180741" src="https://github.com/user-attachments/assets/e5211443-ce35-455a-9630-09249aa79f73" />
 
 --------------------------------------------------------------------------------------------------------------------------------
 📂 Project Structure
