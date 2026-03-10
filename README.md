@@ -2,8 +2,6 @@
 
 An AI-powered multi-modal diagnostic platform designed to assist in the early detection of Parkinson’s Disease using biomedical data such as voice signals, brain MRI images, and hand-drawn spiral patterns.
 
-The system integrates machine learning and deep learning models within a web-based application to analyze multiple biological signals and generate reliable prediction results.
-
 📌 Overview
 
 Parkinson’s Disease is a progressive neurological disorder that affects movement, speech, and coordination. Since symptoms develop gradually, early diagnosis can be difficult.
@@ -19,6 +17,7 @@ This system improves early detection by combining multiple analysis techniques:
 Using multi-modal AI models, the system produces more reliable predictions than single-data approaches.
 
 ⚙️ Core Architecture
+
 🎤 Voice Analysis
 
 MFCC feature extraction
@@ -46,9 +45,7 @@ Feature extraction from images
 CNN–LSTM model for tremor pattern detection
 
 🌐 Web Application
-🎨 Frontend
-
-Built using React.js
+🎨 Frontend: Built using React.js
 
 Features:
 
@@ -62,9 +59,7 @@ Display prediction results instantly
 
 Responsive UI
 
-⚙️ Backend
-
-Built using Flask (Python)
+⚙️ Backend: Built using Flask (Python)
 
 Responsibilities:
 
@@ -85,24 +80,13 @@ Prediction generation
 | Spiral Drawings  | CNN-LSTM Hybrid Model              |
 
 
+
 🧪 Model Training & Evaluation
 Libraries
 
 TensorFlow • Keras • Scikit-learn • OpenCV • NumPy • Pandas
 
-Evaluation Metrics
-
-Accuracy
-
-Precision
-
-Recall
-
-F1 Score
-
-Cross-Validation
-
-These metrics ensure the models are accurate, reliable, and generalize well to new data.
+Evaluation Metrics: Accuracy, Precision, Recall, F1 Score, Cross-Validation.
 
 🛠️ Technology Stack
 
