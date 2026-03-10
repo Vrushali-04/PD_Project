@@ -99,7 +99,7 @@ Deep Learning Models : 📡 MobileNetV2 (Transfer Learning CNN) 📈 Support Vec
 --------------------------------------------------------------------------------------------------------------------------------
 2️⃣ Backend Setup (Flask)
 
-<img width="915" height="357" alt="Screenshot 2026-03-10 180441" src="https://github.com/user-attachments/assets/a4f7e716-0229-4aac-8376-7589f91e44ff" />
+<img width="963" height="353" alt="Screenshot 2026-03-10 182300" src="https://github.com/user-attachments/assets/f5154068-b64d-49c8-942e-f72c7a2662c5" />
 
 --------------------------------------------------------------------------------------------------------------------------------
 3️⃣ Frontend Setup (React)
