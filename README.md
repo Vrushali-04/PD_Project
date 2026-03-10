@@ -2,6 +2,8 @@
 
 An AI-powered multi-modal diagnostic platform designed to assist in the early detection of Parkinson’s Disease using biomedical data such as voice signals, brain MRI images, and hand-drawn spiral patterns.
 
+--------------------------------------------------------------------------------------------------------------------------------
+
 📌 Overview
 
 Parkinson’s Disease is a progressive neurological disorder that affects movement, speech, and coordination. Early diagnosis is challenging because symptoms appear gradually.
