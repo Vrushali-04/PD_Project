@@ -18,7 +18,7 @@ Using multi-modal AI models, the system produces more reliable predictions than 
 
 ⚙️ Core Architecture
 
-🎤 Voice Analysis
+🎤 Voice Analysis:
 
 MFCC feature extraction
 
@@ -28,7 +28,7 @@ Signal preprocessing
 
 SVM-based classification
 
-🧠 Brain Image Analysis
+🧠 Brain Image Analysis:
 
 Image preprocessing using OpenCV
 
@@ -36,7 +36,7 @@ Feature extraction with CNN
 
 Detection of neurological patterns
 
-✍️ Spiral Pattern Analysis
+✍️ Spiral Pattern Analysis:
 
 Drawing preprocessing
 
@@ -56,21 +56,16 @@ Responsibilities: API handling • Data preprocessing • ML model loading • P
 
 🧠 AI Models
 
-| Data Type        | Model                              |
-| ---------------- | ---------------------------------- |
-| Voice Data       | Support Vector Machine (SVM)       |
-| Brain MRI Images | Convolutional Neural Network (CNN) |
-| Spiral Drawings  | CNN-LSTM Hybrid Model              |
-
-![Uploading Screenshot 2026-03-10 110300.png…]()
-
-
+| Prediction Input Type | Machine Learning / Deep Learning Model  |
+|-----------------------|-----------------------------------------|
+| Voice Data            | Support Vector Machine (SVM)            |
+| Brain MRI Images      | Convolutional Neural Network (CNN)      |
+| Spiral Drawings       | CNN–LSTM Hybrid Model                   |
 
 
 🧪 Model Training & Evaluation
-Libraries
 
-TensorFlow • Keras • Scikit-learn • OpenCV • NumPy • Pandas
+Libraries: TensorFlow • Keras • Scikit-learn • OpenCV • NumPy • Pandas
 
 Evaluation Metrics: Accuracy, Precision, Recall, F1 Score, Cross-Validation.
 
