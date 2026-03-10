@@ -43,6 +43,7 @@ Drawing preprocessing
 Image feature extraction
 
 CNN–LSTM tremor pattern detection
+--------------------------------------------------------------------------------------------------------------------------------
 
 🌐 Web Application
 
@@ -53,6 +54,7 @@ Features: Voice upload • MRI image upload • Spiral drawing upload • Instan
 ⚙️ Backend: Built using Flask (Python)
 
 Responsibilities: API handling • Data preprocessing • ML model loading • Prediction generation
+--------------------------------------------------------------------------------------------------------------------------------
 
 🧠 AI Models
 
@@ -62,12 +64,14 @@ Responsibilities: API handling • Data preprocessing • ML model loading • P
 | Brain MRI Images      | Convolutional Neural Network (CNN)      |
 | Spiral Drawings       | CNN–LSTM Hybrid Model                   |
 
+--------------------------------------------------------------------------------------------------------------------------------
 
 🧪 Model Training & Evaluation
 
 Libraries: TensorFlow • Keras • Scikit-learn • OpenCV • NumPy • Pandas
 
 Evaluation Metrics: Accuracy, Precision, Recall, F1 Score, Cross-Validation.
+--------------------------------------------------------------------------------------------------------------------------------
 
 🛠️ Technology Stack
 
@@ -78,6 +82,7 @@ Backend : 🐍 Python 🌐 Flask 🔗 REST APIs
 Machine Learning / AI : 🔥 TensorFlow 🧠 Keras 📊 Scikit-learn 📷 OpenCV 🔢 NumPy 🐼 Pandas
 
 Deep Learning Models : 📡 MobileNetV2 (Transfer Learning CNN) 📈 Support Vector Machine (SVM) 🔗 CNN-LSTM Hybrid Model
+--------------------------------------------------------------------------------------------------------------------------------
 
 📂 Project Structure
 
