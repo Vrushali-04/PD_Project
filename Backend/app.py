@@ -221,14 +221,16 @@ def predict_voice_route():
 def predict_spiral_route():
     try:
 
+        # Check file exists
         if "image" not in request.files:
             return jsonify({"error": "No image uploaded"}), 400
 
         file = request.files["image"]
 
         if file.filename == "":
-            return jsonify({"error": "Empty filename"}), 400
+            return jsonify({"error": "No file selected"}), 400
 
+        # Allowed extensions
         allowed_extensions = {"png", "jpg", "jpeg"}
 
         ext = file.filename.rsplit(".", 1)[-1].lower()
@@ -236,27 +238,34 @@ def predict_spiral_route():
         if ext not in allowed_extensions:
             return jsonify({"error": "Invalid file type"}), 400
 
+        # Generate unique filename
         filename = f"{uuid.uuid4()}.{ext}"
-
         file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
 
+        # Save uploaded image
         file.save(file_path)
 
         print("✍️ Spiral Image Received:", filename)
 
+        # Run prediction
         result = predict_spiral(file_path)
 
         print("🧠 Spiral Prediction:", result)
 
+        # Delete temporary file
         if os.path.exists(file_path):
             os.remove(file_path)
 
         return jsonify(result)
 
     except Exception as e:
-        print("❌ Spiral Prediction Error:", e)
-        return jsonify({"error": "Failed to process spiral image"}), 500
 
+        print("❌ Spiral Prediction Error:", str(e))
+
+        return jsonify({
+            "error": "Failed to process spiral image",
+            "details": str(e)
+        }), 500
 
 # ==============================
 # RUN SERVER
