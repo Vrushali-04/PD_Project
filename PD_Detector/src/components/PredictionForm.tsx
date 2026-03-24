@@ -128,7 +128,7 @@ const PredictionForm = () => {
               Disease <span className="text-gradient">Prediction</span>
             </h2>
             <p className="text-lg text-muted-foreground">
-              Enter biomedical voice measurement parameters below
+              Provide biometric input for disease prediction
             </p>
           </div>
 
