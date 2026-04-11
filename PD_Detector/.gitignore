@@ -1,3 +1,10 @@
+venv/
+.venv/
+node_modules/
+__pycache__/
+*.pyc
+Backend/uploads/*
+
 # Logs
 logs
 *.log
@@ -22,3 +29,16 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# --- Python Backend ---
+venv/
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# --- Project Specific ---
+Backend/uploads/*
+!Backend/uploads/.gitkeep

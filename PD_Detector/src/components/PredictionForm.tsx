@@ -33,11 +33,12 @@ const PredictionForm = () => {
     ppe: "",
   });
 
-  const [result, setResult] = useState<"healthy" | "detected" | null>(null);
+  // Type definition to match PredictionResultProps exactly
+  const [result, setResult] = useState<"healthy" | "detected" | "error" | null>(null);
   const [confidence, setConfidence] = useState<number>(0);
+  const [explanation, setExplanation] = useState<string>(""); 
   const [loading, setLoading] = useState(false);
-  const [activeSection, setActiveSection] =
-    useState<"voice" | "image" | "drawing">("voice");
+  const [activeSection, setActiveSection] = useState<"voice" | "image" | "drawing">("voice");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -48,7 +49,6 @@ const PredictionForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (Object.values(formData).some((val) => val === "")) {
       toast.error("Please fill in all fields");
       return;
@@ -60,9 +60,7 @@ const PredictionForm = () => {
     try {
       const response = await fetch("http://localhost:5000/predict_voice", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           mdvpFo: parseFloat(formData.mdvpFo),
           mdvpJitter: parseFloat(formData.mdvpJitter),
@@ -76,47 +74,62 @@ const PredictionForm = () => {
         }),
       });
 
-      if (!response.ok) {
-        throw new Error("Server error");
-      }
-
+      if (!response.ok) throw new Error("Server error");
       const data = await response.json();
 
-      /*
-        Backend must return:
-        {
-          prediction: "healthy" or "detected",
-          confidence: 0.89   // between 0 and 1
-        }
-      */
-
       setResult(data.prediction === "detected" ? "detected" : "healthy");
-      setConfidence(data.confidence);
+      setConfidence(data.confidence * 100); 
+      setExplanation("");
 
       if (data.prediction === "healthy") {
         toast.success("Analysis complete!");
       } else {
-        toast.warning(
-          "High probability detected. Please consult a medical professional."
-        );
+        toast.warning("High probability detected.");
       }
     } catch (error) {
-      console.error("Backend error:", error);
       toast.error("Failed to connect to backend");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
-  // Keep these simple (matches your existing components)
-  const handleImageAnalyzed = (imageResult: string) => {
-    setResult(imageResult as "healthy" | "detected");
-    setConfidence(0.85);
+  // HANDLERS: data is now the full object from backend
+  const handleImageAnalyzed = (data: any) => {
+    if (!data) {
+        setResult(null);
+        return;
+    }
+    if (data.error) {
+      setResult("error");
+      setExplanation(data.error);
+      setConfidence(0);
+    } else {
+      setResult(data.prediction === "parkinson" ? "detected" : "healthy");
+      setConfidence(data.confidence);
+      setExplanation(data.message || "");
+    }
   };
 
-  const handlePatternAnalyzed = (patternResult: string) => {
-    setResult(patternResult as "healthy" | "detected");
-    setConfidence(0.85);
+  const handlePatternAnalyzed = (data: any) => {
+    if (!data) {
+        setResult(null);
+        return;
+    }
+    if (data.error) {
+      setResult("error");
+      setExplanation(data.message || data.error); 
+      setConfidence(0);
+    } else {
+      setResult(data.prediction === "parkinson" ? "detected" : "healthy");
+      setConfidence(data.confidence);
+      setExplanation(data.message || "");
+    }
+  };
+
+  const switchTab = (tab: "voice" | "image" | "drawing") => {
+    setActiveSection(tab);
+    setResult(null); 
+    setExplanation("");
   };
 
   return (
@@ -128,58 +141,41 @@ const PredictionForm = () => {
               Disease <span className="text-gradient">Prediction</span>
             </h2>
             <p className="text-lg text-muted-foreground">
-              Provide biometric input for disease prediction
+              Select a diagnostic method and upload your data
             </p>
           </div>
 
-          {/* Tabs */}
           <div className="flex gap-4 mb-8 flex-wrap justify-center">
             <Button
-              type="button"
               variant={activeSection === "voice" ? "default" : "outline"}
-              onClick={() => setActiveSection("voice")}
+              onClick={() => switchTab("voice")}
               className="flex-1 min-w-[200px]"
             >
-              <Mic className="mr-2 h-5 w-5" />
-              Voice Features
+              <Mic className="mr-2 h-5 w-5" /> Voice Features
             </Button>
 
             <Button
-              type="button"
               variant={activeSection === "image" ? "default" : "outline"}
-              onClick={() => setActiveSection("image")}
+              onClick={() => switchTab("image")}
               className="flex-1 min-w-[200px]"
             >
-              <Image className="mr-2 h-5 w-5" />
-              Image Upload
+              <Image className="mr-2 h-5 w-5" /> MRI Upload
             </Button>
 
             <Button
-              type="button"
               variant={activeSection === "drawing" ? "default" : "outline"}
-              onClick={() => setActiveSection("drawing")}
+              onClick={() => switchTab("drawing")}
               className="flex-1 min-w-[200px]"
             >
-              <Pencil className="mr-2 h-5 w-5" />
-              Drawing Pattern
+              <Pencil className="mr-2 h-5 w-5" /> Drawing Pattern
             </Button>
           </div>
 
-          {/* Voice Section */}
-          {activeSection === "voice" && (
-            <Card className="p-8">
+          <Card className="p-8">
+            {activeSection === "voice" && (
               <form onSubmit={handleSubmit} className="space-y-6">
-                <VoiceFeatureInputs
-                  formData={formData}
-                  onChange={handleInputChange}
-                />
-
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="w-full"
-                  disabled={loading}
-                >
+                <VoiceFeatureInputs formData={formData} onChange={handleInputChange} />
+                <Button type="submit" size="lg" className="w-full" disabled={loading}>
                   {loading ? (
                     <>
                       <Loader2 className="mr-2 h-5 w-5 animate-spin" />
@@ -190,41 +186,24 @@ const PredictionForm = () => {
                   )}
                 </Button>
               </form>
+            )}
 
-              {result && (
-                <PredictionResult
-                  result={result}
-                  confidence={confidence}
-                />
-              )}
-            </Card>
-          )}
-
-          {/* Image Section */}
-          {activeSection === "image" && (
-            <Card className="p-8">
+            {activeSection === "image" && (
               <ImageUpload onImageAnalyzed={handleImageAnalyzed} />
-              {result && (
-                <PredictionResult
-                  result={result}
-                  confidence={confidence}
-                />
-              )}
-            </Card>
-          )}
+            )}
 
-          {/* Drawing Section */}
-          {activeSection === "drawing" && (
-            <Card className="p-8">
+            {activeSection === "drawing" && (
               <DrawingCanvas onPatternAnalyzed={handlePatternAnalyzed} />
-              {result && (
-                <PredictionResult
-                  result={result}
-                  confidence={confidence}
-                />
-              )}
-            </Card>
-          )}
+            )}
+
+            {result && (
+              <PredictionResult
+                result={result}
+                confidence={confidence}
+                explanation={explanation}
+              />
+            )}
+          </Card>
         </div>
       </div>
     </section>

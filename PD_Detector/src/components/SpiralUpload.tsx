@@ -2,23 +2,26 @@ import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Upload, X, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
-import PredictionResult from "./PredictionResult";
+
+interface SpiralUploadProps {
+  onPatternAnalyzed: (data: any) => void;
+}
 
 interface PredictionResponse {
   prediction?: string;
   confidence?: number;
   error?: string;
+  message?: string;
 }
 
-const SpiralUpload = () => {
+const SpiralUpload: React.FC<SpiralUploadProps> = ({ onPatternAnalyzed }) => {
   const [image, setImage] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [result, setResult] = useState<{ prediction: "healthy" | "detected"; confidence: number } | null>(null);
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Drag handlers
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
@@ -29,9 +32,7 @@ const SpiralUpload = () => {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-
     const droppedFile = e.dataTransfer.files[0];
-
     if (droppedFile && droppedFile.type.startsWith("image/")) {
       handleFile(droppedFile);
     } else {
@@ -39,35 +40,29 @@ const SpiralUpload = () => {
     }
   };
 
-  // File select
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) handleFile(selectedFile);
   };
 
-  // Handle uploaded file
   const handleFile = (selectedFile: File) => {
     const reader = new FileReader();
-
     reader.onload = (e) => {
       setImage(e.target?.result as string);
       setFile(selectedFile);
-      setResult(null);
+      onPatternAnalyzed(null); 
       toast.success("Spiral pattern uploaded successfully");
     };
-
     reader.readAsDataURL(selectedFile);
   };
 
   const handleRemove = () => {
     setImage(null);
     setFile(null);
-    setResult(null);
-
+    onPatternAnalyzed(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  // Analyze Spiral Pattern
   const handleAnalyze = async () => {
     if (!file) {
       toast.error("Please upload a spiral drawing first");
@@ -75,7 +70,6 @@ const SpiralUpload = () => {
     }
 
     setLoading(true);
-    toast.info("Analyzing spiral drawing...");
 
     try {
       const formData = new FormData();
@@ -86,32 +80,17 @@ const SpiralUpload = () => {
         body: formData,
       });
 
-      const text = await response.text();
+      const data: PredictionResponse = await response.json();
+      onPatternAnalyzed(data);
 
-      let data: PredictionResponse;
-
-      try {
-        data = JSON.parse(text);
-      } catch {
-        throw new Error("Invalid response from server. Make sure backend route /predict_spiral is working.");
+      if (data.error) {
+        toast.error("Security Check: Image Rejected");
+      } else {
+        toast.success(`Analysis complete!`);
       }
-
-      if (!response.ok || data.error) {
-        throw new Error(data.error || "Failed to analyze spiral drawing");
-      }
-
-      const prediction: "healthy" | "detected" =
-        data.prediction === "parkinson" ? "detected" : "healthy";
-
-      setResult({
-        prediction,
-        confidence: data.confidence!,
-      });
-
-      toast.success(`Spiral analysis complete: ${prediction}`);
     } catch (error: any) {
       console.error(error);
-      toast.error(`Error analyzing spiral drawing: ${error.message}`);
+      toast.error("Failed to connect to backend server");
     } finally {
       setLoading(false);
     }
@@ -134,16 +113,9 @@ const SpiralUpload = () => {
             <div className="p-4 rounded-full bg-primary/10">
               <Upload className="h-10 w-10 text-primary" />
             </div>
-
             <div>
-              <p className="text-lg font-medium mb-1">
-                Drag and drop your spiral drawing here
-              </p>
-
-              <p className="text-sm text-muted-foreground mb-4">
-                or click to browse (spiral drawing pattern image)
-              </p>
-
+              <p className="text-lg font-medium mb-1">Drag and drop drawing here</p>
+              <p className="text-sm text-muted-foreground mb-4">or click to browse</p>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -151,12 +123,7 @@ const SpiralUpload = () => {
                 onChange={handleFileSelect}
                 className="hidden"
               />
-
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => fileInputRef.current?.click()}
-              >
+              <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()}>
                 <ImageIcon className="mr-2 h-4 w-4" />
                 Browse Files
               </Button>
@@ -166,12 +133,7 @@ const SpiralUpload = () => {
       ) : (
         <div className="space-y-4">
           <div className="relative rounded-lg overflow-hidden border-2 border-primary/20">
-            <img
-              src={image}
-              alt="Uploaded spiral drawing"
-              className="w-full h-64 object-contain bg-muted/30"
-            />
-
+            <img src={image} alt="Drawing" className="w-full h-64 object-contain bg-muted/30" />
             <Button
               type="button"
               variant="destructive"
@@ -182,30 +144,9 @@ const SpiralUpload = () => {
               <X className="h-4 w-4" />
             </Button>
           </div>
-
-          <Button
-            type="button"
-            onClick={handleAnalyze}
-            disabled={loading}
-            className="w-full"
-            size="lg"
-          >
-            {loading ? (
-              "Analyzing..."
-            ) : (
-              <>
-                <ImageIcon className="mr-2 h-5 w-5" />
-                Analyze Spiral Pattern
-              </>
-            )}
+          <Button type="button" onClick={handleAnalyze} disabled={loading} className="w-full" size="lg">
+            {loading ? "Analyzing..." : "Analyze Drawing Pattern"}
           </Button>
-
-          {result && (
-            <PredictionResult
-              result={result.prediction}
-              confidence={result.confidence}
-            />
-          )}
         </div>
       )}
     </div>

@@ -1,0 +1,61 @@
+===========================================================
+📄 PROJECT HANDOVER GUIDE: Parkinson's Detection System
+===========================================================
+
+1. PROJECT OVERVIEW
+-----------------------------------------------------------
+This project is a Multi-Modal Parkinson's Disease Detection System 
+using a Hybrid Sentinel Architecture.
+
+Features included:
+* MRI Analysis: Brain scan classification with a "Sentinel" 
+  guard model to verify image integrity.
+* Spiral Analysis: Hand-drawn spiral analysis with a 
+  "Geometric Gatekeeper" to filter out digital fraud 
+  (e.g., certificates or logos).
+
+NOTE: The Voice Analysis module has been removed from this 
+version to optimize performance and security.
+
+2. SETUP INSTRUCTIONS (REQUIRED)
+-----------------------------------------------------------
+The virtual environment (venv) was removed to keep the file 
+size manageable. You MUST recreate it locally:
+
+Step A: Open your terminal in the /Backend folder.
+Step B: Create a new virtual environment:
+        python -m venv venv
+Step C: Activate it:
+        Windows:    venv\Scripts\activate
+        Mac/Linux:  source venv/bin/activate
+Step D: Install dependencies:
+        pip install -r requirements.txt
+
+3. RUNNING THE APPLICATION
+-----------------------------------------------------------
+To start the full system, you need two terminal windows:
+
+WINDOW 1 (Backend):
+- Go to /Backend folder.
+- Ensure venv is active.
+- Run: python app.py
+
+WINDOW 2 (Frontend):
+- Go to /PD_Detector folder.
+- Run: npm install (first time only)
+- Run: npm run dev
+
+4. IMPORTANT TECHNICAL NOTES
+-----------------------------------------------------------
+* MODELS: The AI "brains" (.h5 and .pth files) are 
+  located in /Backend/models/.
+* DEVICE: The system is hardcoded to run on "CPU". 
+  This ensures the AI runs on any laptop without 
+  needing a specialized GPU.
+* SECURITY: If the Spiral upload rejects an image, 
+  it is likely due to the "Geometric Gatekeeper" 
+  detecting digital-style textures.
+
+===========================================================
+Handover Complete.
+===========================================================

@@ -2,7 +2,11 @@ import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Upload, X, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
-import PredictionResult from "./PredictionResult";
+
+// Define the interface to accept the handler from PredictionForm
+interface ImageUploadProps {
+  onImageAnalyzed: (data: any) => void;
+}
 
 interface PredictionResponse {
   prediction?: string;
@@ -10,15 +14,13 @@ interface PredictionResponse {
   error?: string;
 }
 
-const ImageUpload = () => {
+const ImageUpload: React.FC<ImageUploadProps> = ({ onImageAnalyzed }) => {
   const [image, setImage] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [result, setResult] = useState<{ prediction: "healthy" | "detected"; confidence: number } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Drag-and-drop handlers
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
@@ -35,19 +37,17 @@ const ImageUpload = () => {
     }
   };
 
-  // File selection
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) handleFile(selectedFile);
   };
 
-  // Handle uploaded file
   const handleFile = (selectedFile: File) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       setImage(e.target?.result as string);
       setFile(selectedFile);
-      setResult(null);
+      onImageAnalyzed(null); // Clear previous results in parent
       toast.success("Image uploaded successfully");
     };
     reader.readAsDataURL(selectedFile);
@@ -56,11 +56,10 @@ const ImageUpload = () => {
   const handleRemove = () => {
     setImage(null);
     setFile(null);
-    setResult(null);
+    onImageAnalyzed(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  // Analyze image with backend
   const handleAnalyze = async () => {
     if (!file) {
       toast.error("Please upload an image first");
@@ -68,38 +67,29 @@ const ImageUpload = () => {
     }
 
     setLoading(true);
-    toast.info("Analyzing image...");
 
     try {
       const formData = new FormData();
-      formData.append("image", file); // ⚡ Must match Flask key
+      formData.append("image", file);
 
       const response = await fetch("http://127.0.0.1:5000/predict_image", {
         method: "POST",
         body: formData,
       });
 
-      // Check for HTML response (common if Flask route wrong)
-      const text = await response.text();
-      let data: PredictionResponse;
-      try {
-        data = JSON.parse(text);
-      } catch {
-        throw new Error("Invalid response from server. Make sure backend is running at /predict-image");
+      const data: PredictionResponse = await response.json();
+
+      // Send data to PredictionForm
+      onImageAnalyzed(data);
+
+      if (data.error) {
+        toast.error("MRI Validation Failed");
+      } else {
+        toast.success(`Analysis complete`);
       }
-
-      if (!response.ok || data.error) {
-        throw new Error(data.error || "Failed to analyze image");
-      }
-
-      // Map backend label "parkinson" → detected
-      const prediction: "healthy" | "detected" = data.prediction === "parkinson" ? "detected" : "healthy";
-
-      setResult({ prediction, confidence: data.confidence! });
-      toast.success(`Image analysis complete: ${prediction}`);
     } catch (error: any) {
       console.error(error);
-      toast.error(`Error analyzing image: ${error.message}`);
+      toast.error("Failed to connect to backend");
     } finally {
       setLoading(false);
     }
@@ -123,10 +113,8 @@ const ImageUpload = () => {
               <Upload className="h-10 w-10 text-primary" />
             </div>
             <div>
-              <p className="text-lg font-medium mb-1">Drag and drop your image here</p>
-              <p className="text-sm text-muted-foreground mb-4">
-                or click to browse (brain scan or handwriting sample)
-              </p>
+              <p className="text-lg font-medium mb-1">Drag and drop your MRI here</p>
+              <p className="text-sm text-muted-foreground mb-4">or click to browse</p>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -134,11 +122,7 @@ const ImageUpload = () => {
                 onChange={handleFileSelect}
                 className="hidden"
               />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => fileInputRef.current?.click()}
-              >
+              <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()}>
                 <ImageIcon className="mr-2 h-4 w-4" />
                 Browse Files
               </Button>
@@ -148,11 +132,7 @@ const ImageUpload = () => {
       ) : (
         <div className="space-y-4">
           <div className="relative rounded-lg overflow-hidden border-2 border-primary/20">
-            <img
-              src={image}
-              alt="Uploaded medical image"
-              className="w-full h-64 object-contain bg-muted/30"
-            />
+            <img src={image} alt="MRI" className="w-full h-64 object-contain bg-muted/30" />
             <Button
               type="button"
               variant="destructive"
@@ -163,26 +143,14 @@ const ImageUpload = () => {
               <X className="h-4 w-4" />
             </Button>
           </div>
-          <Button
-            type="button"
-            onClick={handleAnalyze}
-            disabled={loading}
-            className="w-full"
-            size="lg"
-          >
+          <Button type="button" onClick={handleAnalyze} disabled={loading} className="w-full" size="lg">
             {loading ? "Analyzing..." : (
               <>
                 <ImageIcon className="mr-2 h-5 w-5" />
-                Analyze Image
+                Analyze MRI Image
               </>
             )}
           </Button>
-          {result && (
-            <PredictionResult
-              result={result.prediction}
-              confidence={result.confidence}
-            />
-          )}
         </div>
       )}
     </div>
