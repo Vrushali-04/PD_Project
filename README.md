@@ -110,68 +110,9 @@ Database : 🐬 MySQL
 --------------------------------------------------------------------------------------------------------------------------------
 📂 Project Structure
 
-Parkinson-Disease-Prediction/
-│
-├── PD_Detector/
-│   ├── public/
-│   ├── src/
-│   │   ├── assets/
-│   │   ├── components/
-│   │   │   ├── ui/
-│   │   │   ├── AboutSection.tsx
-│   │   │   ├── ContactSection.tsx
-│   │   │   ├── HeroSection.tsx
-│   │   │   ├── ImageUpload.tsx
-│   │   │   ├── Navbar.tsx
-│   │   │   ├── PredictionForm.tsx
-│   │   │   ├── PredictionResult.tsx
-│   │   │   ├── SpiralUpload.tsx
-│   │   │   └── TeamSection.tsx
-│   │   ├── hooks/
-│   │   ├── lib/
-│   │   ├── pages/
-│   │   ├── App.css
-│   │   ├── App.tsx
-│   │   ├── index.css
-│   │   ├── main.tsx
-│   │   │   └── vite-env.d.ts
-│   ├── index.html
-│   ├── package.json
-│   ├── tailwind.config.ts
-│   ├── vite.config.ts
-│   └── tsconfig.json
-│
-├── Backend/
-│   ├── datasets/
-│   │   ├── handwriting/
-│   │   │   └── combined/
-│   │   │       ├── testing/
-│   │   │       └── training/
-│   │   │           ├── healthy/
-│   │   │           └── parkinson/
-│   │   ├── mri_slices/
-│   │   └── scan_type/
-│   ├── models/
-│   │   ├── best_mri_cnn.h5
-│   │   ├── best_spiral_cnn.h5
-│   │   ├── brain_classifier.pth
-│   │   ├── drawing_gatekeeper.pth
-│   │   ├── extract_mri.py
-│   │   ├── predict_mri.py
-│   │   ├── predict_spiral.py
-│   │   ├── train_brain_classifier.py
-│   │   ├── train_drawing_gatekeeper.py
-│   │   ├── train_mri_model.py
-│   │   └── train_spiral_model.py
-│   ├── uploads/
-│   ├── app.py
-│   ├── create_non_brain.py
-│   └── db.py
-│
-└── README.md
 
-
-<img width="585" height="659" alt="Screenshot 2026-03-08 175850" src="https://github.com/user-attachments/assets/3893a193-170d-4561-a51b-cb9efe8f714d" />
+<img width="1354" height="728" alt="Screenshot 2026-04-12 131919" src="https://github.com/user-attachments/assets/44e327bf-0b00-4667-947b-faaeaf912318" />
+<img width="1392" height="697" alt="Screenshot 2026-04-12 132047" src="https://github.com/user-attachments/assets/54e737e9-a953-4872-b76a-9ac4917444a1" />
 
 --------------------------------------------------------------------------------------------------------------------------------
 
