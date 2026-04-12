@@ -1,4 +1,4 @@
-🧠 Parkinson’s Disease Prediction System
+# 🧠 Parkinson’s Disease Prediction System
 
 This platform is designed as a secure, AI-driven diagnostic aid for early detection of Parkinson's Disease.
 
@@ -11,9 +11,11 @@ Unlike traditional systems, it combines:
 👉 Along with a custom-built “Sentinel Security Layer” to ensure only valid medical inputs are analyzed.
 
 --------------------------------------------------------------------------------------------------------------------------------
-System Architecture: Dual-Sentinel Framework : To eliminate unreliable predictions and AI hallucinations, the system follows a:
+# System Architecture: 
 
-🔒 Layer 1: Sentinel Guard (Security Layer) : 
+Dual-Sentinel Framework : To eliminate unreliable predictions and AI hallucinations, the system follows a:
+
+## Layer 1: Sentinel Guard (Security Layer) : 
 
 Built using PyTorch-based CNN models
 
@@ -27,7 +29,7 @@ Key Functions:
 
 🚫 Rejects invalid / fraudulent inputs
 
-🩺 Layer 2: Medical Doctor (Diagnosis Layer) : 
+## Layer 2: Medical Doctor (Diagnosis Layer) : 
 
 Activated only after validation
 
@@ -44,29 +46,30 @@ Capabilities:
 
 --------------------------------------------------------------------------------------------------------------------------------
 
-🌐 Web Application
+# 🌐 Web Application
 
 🎨 Frontend: Built using React.js
 
-Features: Voice upload • MRI image upload • Spiral drawing upload • Instant prediction results • Responsive UI
+Features: MRI image upload • Spiral drawing upload • Instant prediction results • Responsive UI
 
 ⚙️ Backend: Built using Flask (Python)
 
 Responsibilities: API handling • Data preprocessing • ML model loading • Prediction generation
 
 --------------------------------------------------------------------------------------------------------------------------------
+# 🧠 Deep Learning Model Architecture
 
-🧠 AI Models
+| Modality      | Phase     | Architecture         | Framework     | Role       |
+| ------------- | --------- | -------------------- | ------------- | ---------- |
+| Brain MRI     | Security  | Custom CNN (Texture) | PyTorch       | Validator  |
+| Brain MRI     | Diagnosis | MobileNetV2          | TensorFlow    | Classifier |
+| Spiral Sketch | Security  | CNN + OpenCV Hybrid  | PyTorch / CV2 | Anti-Fraud |
+| Spiral Sketch | Diagnosis | CNN–LSTM Hybrid      | TensorFlow    | Classifier |
 
-| Prediction Input Type | Machine Learning / Deep Learning Model  |
-|-----------------------|-----------------------------------------|
-| Voice Data            | Support Vector Machine (SVM)            |
-| Brain MRI Images      | Convolutional Neural Network (CNN)      |
-| Spiral Drawings       | CNN–LSTM Hybrid Model                   |
 
 --------------------------------------------------------------------------------------------------------------------------------
 
-🧪 Model Training & Evaluation
+# 🧪 Model Training & Evaluation
 
 Libraries: TensorFlow • Keras • Scikit-learn • OpenCV • NumPy • Pandas
 
@@ -74,7 +77,7 @@ Evaluation Metrics: Accuracy, Precision, Recall, F1 Score, Cross-Validation.
 
 --------------------------------------------------------------------------------------------------------------------------------
 
-🛠️ Technology Stack
+# 🛠️ Technology Stack
 
 Frontend : ⚛️ React.js 🟦 TypeScript 🎨 CSS ⚡ Vite 🌬️ Tailwind CSS
 
@@ -82,10 +85,12 @@ Backend : 🐍 Python 🌐 Flask 🔗 REST APIs
 
 Machine Learning / AI : 🔥 TensorFlow 🧠 Keras 📊 Scikit-learn 📷 OpenCV 🔢 NumPy 🐼 Pandas
 
-Deep Learning Models : 📡 MobileNetV2 (Transfer Learning CNN) 📈 Support Vector Machine (SVM) 🔗 CNN-LSTM Hybrid Model
+Deep Learning Models : 📡 MobileNetV2 (Transfer Learning CNN) 🔗 CNN-LSTM Hybrid Model
+
+Database : 🐬 MySQL
 
 --------------------------------------------------------------------------------------------------------------------------------
-⚙️ Setup Instructions :
+# ⚙️ Setup Instructions :
 
 1️⃣ Database Setup (MySQL)
 
