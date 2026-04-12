@@ -5,6 +5,7 @@ This platform is designed as a secure, AI-driven diagnostic aid for early detect
 Unlike traditional systems, it combines:
 
 🧠 Structural neurological data (MRI)
+
 ✍️ Motor-control patterns (spiral drawings)
 
 👉 Along with a custom-built “Sentinel Security Layer” to ensure only valid medical inputs are analyzed.
@@ -15,23 +16,31 @@ Unlike traditional systems, it combines:
 To eliminate unreliable predictions and AI hallucinations, the system follows a:
 
 🔒 Layer 1: Sentinel Guard (Security Layer)
+
 Built using PyTorch-based CNN models
+
 Validates authenticity before diagnosis
 
 Key Functions:
 
 ✅ MRI Sentinel → Confirms presence of real brain scan
+
 ✅ Spiral Sentinel → Detects real pen-on-paper texture vs digital images
+
 🚫 Rejects invalid / fraudulent inputs
 
 🩺 Layer 2: Medical Doctor (Diagnosis Layer)
+
 Activated only after validation
+
 Uses TensorFlow deep learning models
 
 Capabilities:
 
 🧠 Parkinson’s classification
+
 📊 High-precision prediction
+
 🔍 Dataset-trained diagnostic models
 
 
