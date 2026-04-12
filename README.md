@@ -1,4 +1,4 @@
-# 🧠 Parkinson’s Disease Prediction System
+## 🧠 Parkinson’s Disease Prediction System
 
 This platform is designed as a secure, AI-driven diagnostic aid for early detection of Parkinson's Disease.
 
@@ -11,11 +11,11 @@ Unlike traditional systems, it combines:
 👉 Along with a custom-built “Sentinel Security Layer” to ensure only valid medical inputs are analyzed.
 
 --------------------------------------------------------------------------------------------------------------------------------
-# System Architecture: 
+## System Architecture: 
 
 Dual-Sentinel Framework : To eliminate unreliable predictions and AI hallucinations, the system follows a:
 
-## Layer 1: Sentinel Guard (Security Layer) : 
+### Layer 1: Sentinel Guard (Security Layer) : 
 
 Built using PyTorch-based CNN models
 
@@ -29,7 +29,7 @@ Key Functions:
 
 🚫 Rejects invalid / fraudulent inputs
 
-## Layer 2: Medical Doctor (Diagnosis Layer) : 
+### Layer 2: Medical Doctor (Diagnosis Layer) : 
 
 Activated only after validation
 
@@ -46,7 +46,7 @@ Capabilities:
 
 --------------------------------------------------------------------------------------------------------------------------------
 
-# 🌐 Web Application
+## 🌐 Web Application
 
 🎨 Frontend: Built using React.js
 
@@ -57,7 +57,7 @@ Features: MRI image upload • Spiral drawing upload • Instant prediction resu
 Responsibilities: API handling • Data preprocessing • ML model loading • Prediction generation
 
 --------------------------------------------------------------------------------------------------------------------------------
-# 🧠 Deep Learning Model Architecture
+## 🧠 Deep Learning Model Architecture
 
 | Modality      | Phase     | Architecture         | Framework     | Role       |
 | ------------- | --------- | -------------------- | ------------- | ---------- |
@@ -69,7 +69,7 @@ Responsibilities: API handling • Data preprocessing • ML model loading • P
 
 --------------------------------------------------------------------------------------------------------------------------------
 
-# 🧪 Model Training & Evaluation
+## 🧪 Model Training & Evaluation
 
 Libraries: TensorFlow • Keras • Scikit-learn • OpenCV • NumPy • Pandas
 
@@ -77,7 +77,7 @@ Evaluation Metrics: Accuracy, Precision, Recall, F1 Score, Cross-Validation.
 
 --------------------------------------------------------------------------------------------------------------------------------
 
-# 🛠️ Technology Stack
+## 🛠️ Technology Stack
 
 Frontend : ⚛️ React.js 🟦 TypeScript 🎨 CSS ⚡ Vite 🌬️ Tailwind CSS
 
@@ -90,7 +90,7 @@ Deep Learning Models : 📡 MobileNetV2 (Transfer Learning CNN) 🔗 CNN-LSTM Hy
 Database : 🐬 MySQL
 
 --------------------------------------------------------------------------------------------------------------------------------
-# ⚙️ Setup Instructions :
+## ⚙️ Setup Instructions :
 
 1️⃣ Database Setup (MySQL)
 
