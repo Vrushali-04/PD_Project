@@ -1,50 +1,39 @@
 🧠 Parkinson’s Disease Prediction System
 
-An AI-powered multi-modal diagnostic platform designed to assist in the early detection of Parkinson’s Disease using biomedical data such as voice signals, brain MRI images, and hand-drawn spiral patterns.
+This platform is designed as a secure, AI-driven diagnostic aid for early detection of Parkinson's Disease.
+
+Unlike traditional systems, it combines:
+
+🧠 Structural neurological data (MRI)
+✍️ Motor-control patterns (spiral drawings)
+
+👉 Along with a custom-built “Sentinel Security Layer” to ensure only valid medical inputs are analyzed.
 
 --------------------------------------------------------------------------------------------------------------------------------
+🏗️ System Architecture: Dual-Sentinel Framework
 
-📌 Overview
+To eliminate unreliable predictions and AI hallucinations, the system follows a:
 
-Parkinson’s Disease is a progressive neurological disorder that affects movement, speech, and coordination. Early diagnosis is challenging because symptoms appear gradually.
+🔒 Layer 1: Sentinel Guard (Security Layer)
+Built using PyTorch-based CNN models
+Validates authenticity before diagnosis
 
-This system improves detection using multi-modal AI analysis of:
+Key Functions:
 
-🎤 Voice Signals
+✅ MRI Sentinel → Confirms presence of real brain scan
+✅ Spiral Sentinel → Detects real pen-on-paper texture vs digital images
+🚫 Rejects invalid / fraudulent inputs
 
-🧠 Brain MRI Images
+🩺 Layer 2: Medical Doctor (Diagnosis Layer)
+Activated only after validation
+Uses TensorFlow deep learning models
 
-✍️ Spiral Drawing Patterns
+Capabilities:
 
-By combining multiple data sources, the model generates more reliable predictions than single-input systems.
+🧠 Parkinson’s classification
+📊 High-precision prediction
+🔍 Dataset-trained diagnostic models
 
-⚙️ Core Architecture
-
-🎤 Voice Analysis
-
-MFCC feature extraction
-
-Jitter & shimmer analysis
-
-Signal preprocessing
-
-SVM classification
-
-🧠 Brain MRI Analysis
-
-Image preprocessing (OpenCV)
-
-Feature extraction using CNN
-
-Neurological pattern detection
-
-✍️ Spiral Pattern Analysis
-
-Drawing preprocessing
-
-Image feature extraction
-
-CNN–LSTM tremor pattern detection
 
 --------------------------------------------------------------------------------------------------------------------------------
 
