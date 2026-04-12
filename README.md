@@ -11,11 +11,9 @@ Unlike traditional systems, it combines:
 👉 Along with a custom-built “Sentinel Security Layer” to ensure only valid medical inputs are analyzed.
 
 --------------------------------------------------------------------------------------------------------------------------------
-🏗️ System Architecture: Dual-Sentinel Framework
+System Architecture: Dual-Sentinel Framework : To eliminate unreliable predictions and AI hallucinations, the system follows a:
 
-To eliminate unreliable predictions and AI hallucinations, the system follows a:
-
-🔒 Layer 1: Sentinel Guard (Security Layer)
+🔒 Layer 1: Sentinel Guard (Security Layer) : 
 
 Built using PyTorch-based CNN models
 
@@ -29,7 +27,7 @@ Key Functions:
 
 🚫 Rejects invalid / fraudulent inputs
 
-🩺 Layer 2: Medical Doctor (Diagnosis Layer)
+🩺 Layer 2: Medical Doctor (Diagnosis Layer) : 
 
 Activated only after validation
 
