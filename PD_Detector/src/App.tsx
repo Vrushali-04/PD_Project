@@ -1,6 +1,5 @@
 import Prediction from "./pages/Prediction";
-import VoicePrediction from "./components/VoicePrediction";
-import SpiralUpload from "./components/SpiralUpload"; // ⭐ ADD THIS
+import SpiralUpload from "./components/SpiralUpload";
 
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -15,19 +14,6 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
 const queryClient = new QueryClient();
-
-/*
-UPDATED ROUTING STRUCTURE:
-
-/        → Signup page (default)
-/login   → Login page
-/signup  → Signup page
-/home    → Dashboard
-/predict → MRI Image prediction
-/voice   → Voice prediction
-/spiral  → Spiral drawing prediction ⭐ NEW
-*        → 404 page
-*/
 
 function App() {
   return (
@@ -49,13 +35,10 @@ function App() {
             {/* Dashboard */}
             <Route path="/home" element={<Index />} />
 
-            {/* MRI Image Prediction */}
+            {/* Prediction Page (MRI + Drawing inside) */}
             <Route path="/predict" element={<Prediction />} />
 
-            {/* Voice Prediction */}
-            <Route path="/voice" element={<VoicePrediction />} />
-
-            {/* ⭐ Spiral Drawing Prediction */}
+            {/* Optional: Spiral direct route */}
             <Route path="/spiral" element={<SpiralUpload />} />
 
             {/* 404 Page */}
